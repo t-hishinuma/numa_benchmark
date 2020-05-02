@@ -2,6 +2,7 @@
 #include<omp.h>
 #include<vector>
 #include<iostream>
+#include<string.h>
 
 #define DFUNC_NAME "ddot"
 #define SFUNC_NAME "sdot"
@@ -78,8 +79,8 @@ void output_result_yaml(
 
 int main(int argc, char** argv){
 
-	if(argc!=3){
-		std::cout << "error $1:vector size, $2: iter" << std::endl;
+	if(argc!=4){
+		std::cout << "error $1:vector size, $2: iter, $3: precision (double or float)" << std::endl;
 		return 1;
 	}
 
@@ -88,11 +89,15 @@ int main(int argc, char** argv){
 
 	double time = 0;
 
-	time = bench<float>(size,iter);
-	output_result_yaml(SFUNC_NAME, time, size, sizeof(float));
+	if(strcmp(argv[3], "float") == 0){
+		time = bench<float>(size,iter);
+		output_result_yaml(SFUNC_NAME, time, size, sizeof(float));
+	}
 
-	time = bench<double>(size,iter);
-	output_result_yaml(DFUNC_NAME, time, size, sizeof(double));
+	if(strcmp(argv[3], "double")==0){
+		time = bench<double>(size,iter);
+		output_result_yaml(DFUNC_NAME, time, size, sizeof(double));
+	}
 
 	return 0;
 }

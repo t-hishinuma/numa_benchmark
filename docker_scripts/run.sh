@@ -1,12 +1,9 @@
 #!/bin/bash
 
 #OpenBLAS
-#cd /work/OpenBLAS; mkdir build; cd build; cmake .. ; make -j ; make install 
-apt update -y
-apt install -y libopenblas-dev
+/numa_bench/openblas_build.sh
 
 cd /numa_bench/src/; make -j
-
 
 if [[ -f /work/benchmark_config ]]; then
 	cd /numa_bench/

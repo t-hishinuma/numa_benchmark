@@ -17,5 +17,5 @@ ENV CPATH $LD_LIBRARY_PATH:/usr/local/include/openblas/
 
 # source copy
 COPY ./docker_scripts/run.sh /usr/local/bin/run
-COPY ./docker_scripts/test.sh ./benchmark_config /numa_bench/
+COPY ./docker_scripts/* ./test.sh ./benchmark_config /numa_bench/
 COPY ./src/ /numa_bench/src/
