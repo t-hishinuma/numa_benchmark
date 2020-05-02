@@ -25,7 +25,7 @@ if [ $DDOT_EXEC = 1 ]; then
 		for (( i = $DDOT_MIN_SIZE ; i<= $DDOT_MAX_SIZE ; i=i$DDOT_INCL ))
 		do
 			export OMP_NUM_THREADS=$th
-			./src/blas1_stream/dot.o $i $DDOT_TRIAL double
+			./src/blas1/dot.o $i $DDOT_TRIAL double
 		done
 	done
 fi
@@ -37,7 +37,7 @@ if [ $SDOT_EXEC = 1 ]; then
 		for (( i = $SDOT_MIN_SIZE ; i<= $SDOT_MAX_SIZE ; i=i$SDOT_INCL ))
 		do
 			export OMP_NUM_THREADS=$th
-			./src/blas1_stream/dot.o $i $SDOT_TRIAL float
+			./src/blas1/dot.o $i $SDOT_TRIAL float
 		done
 	done
 fi
