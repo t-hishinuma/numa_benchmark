@@ -1,17 +1,19 @@
 ########################################
 # general config
 ########################################
+#
 # THREAD_CONFIG
-THREADS=(1 2 8)
+#THREADS=(8 2 1)
 
 ########################################
 # OpenBLAS DDOT 
 ########################################
 
 DDOT_EXEC=1 # 1 or 0
+
 DDOT_MIN_SIZE=100
-DDOT_MAX_SIZE=1000
-DDOT_INCL_SIZE=100
+DDOT_MAX_SIZE=100000
+DDOT_INCL="*10" # e.g.) "+10", "*100"
 
 DDOT_TRIAL=10 # for average
 
@@ -20,8 +22,9 @@ DDOT_TRIAL=10 # for average
 ########################################
 
 SDOT_EXEC=1 # 1 or 0
+
 SDOT_MIN_SIZE=100
-SDOT_MAX_SIZE=1000
-SDOT_INCL_SIZE=100
+SDOT_MAX_SIZE=100000
+SDOT_INCL="*10" # e.g.) "+10", "*100"
 
 SDOT_TRIAL=10 # for average
