@@ -1,4 +1,6 @@
 # numa_benchmark
+[![Docker Automated build](https://img.shields.io/badge/Docker-automated-blue)](https://hub.docker.com/repository/docker/hishinumat/numa_benchmark/general)
+
 NUMerical  linear  Algebra Benchmark (with docker)
 
 # How to use 
