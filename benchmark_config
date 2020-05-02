@@ -1,0 +1,25 @@
+########################################
+# general config
+########################################
+#OpenBLAS_DIR?=/usr/local/lib/
+
+########################################
+# OpenBLAS DDOT 
+########################################
+
+DDOT_EXEC=1 # 1 or 0
+DDOT_MIN_SIZE=100
+DDOT_MAX_SIZE=1000
+DDOT_INCL_SIZE=500
+
+# THREAD_CONFIG
+THREADS=(1 2 8)
+
+########################################
+# OpenBLAS  DGEMM
+########################################
+
+DGEMM_EXEC=1 # 1 or 0
+DGEMM_MIN_SIZE=100
+DGEMM_MAX_SIZE=1000
+DGEMM_INCL_SIZE=100
