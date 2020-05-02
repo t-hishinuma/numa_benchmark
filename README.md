@@ -7,6 +7,14 @@ NUMerical  linear  Algebra Benchmark (with docker)
 
 ## Docker
 
+### 設定はデフォルトでいい場合
+
+```
+docker run -v hishinumat/numa_benchmark:latest run
+```
+
+
+### 設定ファイルで自分好みの設定にしたい場合
 ```
 wget https://raw.githubusercontent.com/t-hishinuma/numa_benchmark/master/benchmark_config
 ```
