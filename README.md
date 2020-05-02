@@ -10,7 +10,7 @@ NUMerical  linear  Algebra Benchmark (with docker)
 ### 設定はデフォルトでいい場合
 
 ```
-docker run -v hishinumat/numa_benchmark:latest run
+docker run hishinumat/numa_benchmark:latest run
 ```
 
 
