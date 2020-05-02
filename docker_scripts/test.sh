@@ -1,5 +1,5 @@
 #!/bin/zsh
-. ./benchmark_config
+. $1
 array=()
 
 if [ -n "$THREADS" ]; then
