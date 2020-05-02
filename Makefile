@@ -2,10 +2,10 @@ REGISTRY  := hishinumat/numa_benchmark
 .PHONY: test numa_benchmark
 
 all: 
-	make -C ./src/blas1/ -j
+	make -C ./src/ -j
 
-docker: Dockerfile
+docker: Dockerfile clean
 	docker build -t $(REGISTRY) . -f Dockerfile
 
 clean:
-	make -C ./src/blas1/ clean
+	make -C ./src/ clean

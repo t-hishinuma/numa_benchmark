@@ -12,4 +12,4 @@ all: $(EXES)
 		$(CXX) $(CXXFLAGS) $< -o $@.o $(LDFLAGS)
 
 clean:
-		@rm -rf $(EXES)
+		@rm -rf $(EXES).o
