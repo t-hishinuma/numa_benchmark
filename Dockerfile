@@ -13,8 +13,8 @@ RUN apt-get clean \
 # Library download
 RUN mkdir /numa_bench \
 	&& git clone https://github.com/xianyi/OpenBLAS.git /numa_bench/OpenBLAS
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/lib/
-ENV CPATH $LD_LIBRARY_PATH:/usr/local/include/openblas/
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/lib/:/usr/local/cuda-10.0/lib64/
+ENV CPATH $LD_LIBRARY_PATH:/usr/local/include/openblas/:/usr/local/cuda-10.0/include/
 
 # source copy
 COPY ./docker_scripts/run.sh /usr/local/bin/run
