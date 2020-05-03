@@ -25,7 +25,6 @@ double bench(const size_t size, const size_t iter){
 	std::vector<T> A;
 	std::vector<T> B;
 	std::vector<T> C;
-	T ans = 0;
 
 	for(size_t i=0; i<size*size; i++){
 		A.push_back(rand());
@@ -62,6 +61,10 @@ void output_result_yaml(
 
 	// func name
 	std::cout << "\"func\" : " << "\"" << func << "\"" << std::flush;
+	std::cout << ", " << std::flush;
+
+	// arch. name
+	std::cout << "\"arch\" : " << "\"cpu\"" << std::flush;
 	std::cout << ", " << std::flush;
 
 	// vector_size

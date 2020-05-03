@@ -9,12 +9,21 @@ NUMerical  linear  Algebra Benchmark (with docker)
 
 
 # How to use 
-## Docker
+## Docker (CPU)
 
 ```
 git clone git@github.com:t-hishinuma/numa_benchmark.git
 # vim benchmark_config # if need to change
 make benchmark
+```
+`$(PROJECT_DIR)/result`に結果のymlとhtmlとグラフが生成される
+
+## Docker (GPU)
+
+```
+git clone git@github.com:t-hishinuma/numa_benchmark.git
+# vim benchmark_config # if need to change
+make benchmark-gpu
 ```
 `$(PROJECT_DIR)/result`に結果のymlとhtmlとグラフが生成される
 
@@ -26,7 +35,6 @@ make benchmark
 # benchmark\_configの作成方法
 あとで．大体読めば分かるように作った．．つもり
 
-
 # Requirements
 - git
 - make
@@ -35,13 +43,13 @@ make benchmark
 # Current support status
 ## CPU
 - ddot, sdot
+- dgemm, sgemm
 
 ## GPU
-none
+- ddot, sdot
 
 # Todo
 - benchmark target
-  - cuBLAS support
   - BLAS関数を増やす
   - LAPACK Support
   - FFT support (fftw, cufft)

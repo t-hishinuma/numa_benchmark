@@ -1,39 +1,85 @@
-#include<cblas.h>
+#include <cuda_runtime.h>
+#include "cublas_v2.h"
+#include <iostream>
+#include <vector>
 #include<omp.h>
-#include<vector>
-#include<iostream>
-#include<string.h>
 
 #define DFUNC_NAME "ddot"
 #define SFUNC_NAME "sdot"
 #define READ_WRITE 2 * size
 #define ORDER 2 * size
 
-inline float func(std::vector<float> &x, std::vector<float> &y){
-	return  cblas_sdot(x.size(), x.data(), 1,  y.data(), 1);
+inline float func(float* x, float* y, const size_t size, cublasHandle_t &handle){
+	float result = 0;
+	cublasSdot(handle, size, x, 1, y, 1, &result);
+	return result;
 }
 
-inline double func(std::vector<double> &x, std::vector<double> &y){
-	return  cblas_ddot(x.size(), x.data(), 1,  y.data(), 1);
+inline double func(double* x, double* y, const size_t size, cublasHandle_t &handle){
+	double result = 0;
+	cublasDdot(handle, size, x, 1, y, 1, &result);
+	return result;
 }
 
-template<typename T>
+template <typename T>
 double bench(const size_t size, const size_t iter){
-	
-	std::vector<T> x;
-	std::vector<T> y;
-	T ans = 0;
+	cudaError_t cudaStat;    
+	cublasStatus_t stat;
+	cublasHandle_t handle;
+
+	std::vector<T> Hostx;
+	std::vector<T> Hosty;
 
 	for(size_t i=0; i<size; i++){
-		x.push_back(rand());
-		y.push_back(rand());
+		Hostx.push_back(rand());
+		Hosty.push_back(rand());
 	}
 
+	T* Devx;
+	T* Devy;
+
+	cudaStat = cudaMalloc ((void**)&Devx, Hostx.size() * sizeof(T));
+	cudaStat = cudaMalloc ((void**)&Devy, Hosty.size() * sizeof(T));
+
+	if (cudaStat != cudaSuccess) {
+		std::cout << "device memory allocation failed" << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	stat = cublasCreate(&handle);
+	if (stat != CUBLAS_STATUS_SUCCESS) {
+		std::cout << "CUBLAS initialization failed\n" << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	stat = cublasSetVector(Hostx.size(), sizeof(T), Hostx.data(), 1, Devx, 1);
+	if (stat != CUBLAS_STATUS_SUCCESS) {
+		std::cout << "data download failed" << std::endl;
+		cudaFree (Devx);
+		cublasDestroy(handle);
+		return EXIT_FAILURE;
+	}
+
+	stat = cublasSetVector(Hosty.size(), sizeof(T), Hosty.data(), 1, Devy, 1);
+	if (stat != CUBLAS_STATUS_SUCCESS) {
+		std::cout << "data download failed" << std::endl;
+		cudaFree (Devy);
+		cublasDestroy(handle);
+		return EXIT_FAILURE;
+	}
+
+	cudaStreamSynchronize(0);
+	T result=0;
 	double time = omp_get_wtime();
 	for(size_t i = 0; i < iter; i++){
-		ans = func(x, y);
+		result = func(Devx, Devy, size, handle);
 	}
+	cudaStreamSynchronize(0);
 	time = (omp_get_wtime() - time) / iter;
+
+	cudaFree (Devx);
+	cudaFree (Devy);
+	cublasDestroy(handle);
 
 	return time;
 }
@@ -58,6 +104,10 @@ void output_result_yaml(
 
 	// func name
 	std::cout << "\"func\" : " << "\"" << func << "\"" << std::flush;
+	std::cout << ", " << std::flush;
+
+	// arch. name
+	std::cout << "\"arch\" : " << "\"gpu\"" << std::flush;
 	std::cout << ", " << std::flush;
 
 	// vector_size
