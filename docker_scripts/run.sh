@@ -1,6 +1,8 @@
 #!/bin/bash
 RESULT_FILE=/work/result/result.yml
 
+mkdir -p /work/result/
+
 #CPU Spec
 echo "# get cpu spec..."
 zsh /numa_bench/src/machine_spec/get_cpu_spec.sh > $RESULT_FILE
@@ -18,7 +20,6 @@ cd /numa_bench/src/; make -j
 
 #exec
 if [[ -f /work/benchmark_config ]]; then
-	mkdir -p /work/result/
 	cd /numa_bench/; zsh ./test.sh /work/benchmark_config >> $RESULT_FILE
 
 	cd /work/result/
