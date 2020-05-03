@@ -1,8 +1,9 @@
 FROM nvidia/cuda:10.1-base
 LABEL maintainer "Toshiaki Hishinuma <hishinuma.toshiaki@gmail.com>"
 
-RUN apt update \
-   &&  apt install -y make cmake git zsh\
+RUN apt update -y \
+   && apt install -y python3 python3-matplotlib python3-pandas python3-yaml \
+   &&  apt install -y make cmake git zsh \
    &&  apt install -y gcc gfortran \
    &&  apt install -y cuda-cublas-dev-10-0 cuda-cudart-dev-10-0 cuda-compiler-10.0 cuda-nvprof-10-1 cuda-cusolver-dev-10-0 cuda-cusparse-dev-10-0 
 
