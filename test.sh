@@ -1,11 +1,13 @@
 #!/bin/zsh
-
+#
 if [ $# != 1 ]; then
-	echo "error \$1 is config filename"
-	exit 1
+	ENVFILE="./benchmark_config"
+else 
+	ENVFILE=$1
 fi
 
-. $1
+. $ENVFILE
+
 array=()
 
 if [ -n "$THREADS" ]; then
