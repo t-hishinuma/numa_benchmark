@@ -65,3 +65,6 @@ make benchmark-gpu
   - CIでテスト
 
 やりきれないくらい課題があるので，手伝ってくれる人が居ましたらissueか[Twitter DM](https://twitter.com/Hishinuma_t)ください
+
+# Acknowledgement
+The development of this software was supported by [termoshtt](https://github.com/termoshtt) and [RICOS Co. Ltd.](https://www.ricos.co.jp/).
