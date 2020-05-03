@@ -10,7 +10,18 @@ NUMerical  linear  Algebra Benchmark (with docker)
 
 # How to use 
 ## Docker (CPU)
+### デフォルト設定で良い場合
 
+あらかじめコンテナ内に[設定ファイル](https://github.com/t-hishinuma/numa_benchmark/blob/master/benchmark_config)があるため，実行すると標準出力にyaml形式のベンチマーク結果が出力される．
+結果を集計したい場合は `docker_scripts/yml2html.py` に入力yamlファイルと出力のhtmlのファイル名を与える．
+
+```
+docker run hishinumat/numa_benchmark > result.yml
+python3 docker_scripts/yml2html.py result.yml result.html
+```
+
+### 設定を変更したい場合
+設定ファイルを取得して編集する
 ```
 git clone git@github.com:t-hishinuma/numa_benchmark.git
 # vim benchmark_config # if need to change
@@ -19,12 +30,23 @@ make benchmark
 `$(PROJECT_DIR)/result`に結果のymlとhtmlとグラフが生成される
 
 ## Docker (GPU)
+### デフォルト設定で良い場合
+
+`--gpus all` を与えるとGPUのベンチマークが自動的に実行される
+
+```
+docker run --gpus all --privileged hishinumat/numa_benchmark
+```
+
+### 設定を変更したい場合
+CPUと同様．
 
 ```
 git clone git@github.com:t-hishinuma/numa_benchmark.git
 # vim benchmark_config # if need to change
 make benchmark-gpu
 ```
+
 `$(PROJECT_DIR)/result`に結果のymlとhtmlとグラフが生成される
 
 ## local (非推奨)
