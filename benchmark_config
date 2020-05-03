@@ -1,9 +1,14 @@
 ########################################
 # general config
 ########################################
-#
-# THREAD_CONFIG
-#THREADS=(8 2 1)
+
+#THREADS=(8 2 1) # benchmark target threads
+
+#INITIAL_COMMANDS="echo numa"
+
+OPENBLAS_BUILD=1 # 1 is source build, 0 is apt install
+
+#OPENBLAS_CMAKE_OPTION=""
 
 ########################################
 # OpenBLAS DDOT 
