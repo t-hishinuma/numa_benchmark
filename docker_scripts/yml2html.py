@@ -22,6 +22,7 @@ thread_list = set(df["# of threads"].dropna())
 figure_list = list()
 for func in func_list:
     for thread in thread_list:
+        # DOT
         if func == "ddot" or func == "sdot":
             data = df[ (df["func"] == func) & (df["# of threads"] == thread) ]
             size = data[["size"]].values.tolist()
@@ -32,12 +33,32 @@ for func in func_list:
             title = func + "_" + str(int(thread)) + "threads"
             plt.title(title)
 
-            plt.xlabel("vector size") 
+            plt.xlabel("Vector size") 
             plt.xscale("log")
 
             plt.plot(size, time, label="time [sec]")   
             plt.plot(size, perf, label="performance [GFLOPS]")   
             plt.plot(size, mem, label="memory speed [GB/s]")   
+
+            plt.legend(loc="best") 
+            plt.savefig(title + ".png")
+            plt.close()
+            figure_list.append( title + ".png" )
+        # GEMM
+        if func == "dgemm" or func == "sgemm":
+            data = df[ (df["func"] == func) & (df["# of threads"] == thread) ]
+            size = data[["size"]].values.tolist()
+            time = data[["time [s]"]].values.tolist()
+            perf = data[["perf [GFLOPS]"]].values.tolist()
+
+            title = func + "_" + str(int(thread)) + "threads"
+            plt.title(title)
+
+            plt.xlabel("Matrix size N (N = M = K)") 
+            #plt.xscale("log")
+
+            plt.plot(size, time, label="time [sec]")   
+            plt.plot(size, perf, label="performance [GFLOPS]")   
 
             plt.legend(loc="best") 
             plt.savefig(title + ".png")
