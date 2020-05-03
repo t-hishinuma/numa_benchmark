@@ -13,7 +13,7 @@ git clone git@github.com:t-hishinuma/numa_benchmark.git
 # vim benchmark_config # if need to change
 make benchmark
 ```
-output dir. is `$(PROJECT_DIR)/result`
+`$(PROJECT_DIR)/result`に結果のymlとhtmlとグラフが生成される
 
 benchmark\_configの中は気合で読んでください
 
