@@ -13,5 +13,11 @@ benchmark:
 in: 
 	docker run -it -v $(PWD):/work $(REGISTRY) 
 
+benchmark-gpu: 
+	docker run --gpus all --privileged -v $(PWD):/work $(REGISTRY) run
+
+in-gpu: 
+	docker run --gpus all --privileged -it -v $(PWD):/work $(REGISTRY) 
+
 clean:
 	make -C ./src/ clean

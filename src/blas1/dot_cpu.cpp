@@ -4,38 +4,34 @@
 #include<iostream>
 #include<string.h>
 
-#define DFUNC_NAME "dgemm"
-#define SFUNC_NAME "sgemm"
-#define READ_WRITE size * size * 3
-#define ORDER 2 * size * size * size
+#define DFUNC_NAME "ddot"
+#define SFUNC_NAME "sdot"
+#define READ_WRITE 2 * size
+#define ORDER 2 * size
 
-inline void func(std::vector<float> &A, std::vector<float> &B, std::vector<float> &C, const size_t size){
-	int n = size;
-	cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, n, n, n, 1.0, A.data(), n, B.data(), n, 1.0, C.data(), n);
+inline float func(std::vector<float> &x, std::vector<float> &y){
+	return  cblas_sdot(x.size(), x.data(), 1,  y.data(), 1);
 }
 
-inline void func(std::vector<double> &A, std::vector<double> &B, std::vector<double> &C, const size_t size){
-	int n = size;
-	cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, n, n, n, 1.0, A.data(), n, B.data(), n, 1.0, C.data(), n);
+inline double func(std::vector<double> &x, std::vector<double> &y){
+	return  cblas_ddot(x.size(), x.data(), 1,  y.data(), 1);
 }
 
 template<typename T>
 double bench(const size_t size, const size_t iter){
 	
-	std::vector<T> A;
-	std::vector<T> B;
-	std::vector<T> C;
+	std::vector<T> x;
+	std::vector<T> y;
 	T ans = 0;
 
-	for(size_t i=0; i<size*size; i++){
-		A.push_back(rand());
-		B.push_back(rand());
-		C.push_back(0.0);
+	for(size_t i=0; i<size; i++){
+		x.push_back(rand());
+		y.push_back(rand());
 	}
 
 	double time = omp_get_wtime();
 	for(size_t i = 0; i < iter; i++){
-		func(A, B, C, size);
+		ans = func(x, y);
 	}
 	time = (omp_get_wtime() - time) / iter;
 
@@ -57,7 +53,7 @@ void output_result_yaml(
 	std::cout << "- {" << std::flush;
 
 	// type name
-	std::cout << "\"type\" : " << "\"blas3\"" << std::flush;
+	std::cout << "\"type\" : " << "\"blas1\"" << std::flush;
 	std::cout << ", " << std::flush;
 
 	// func name
@@ -80,9 +76,9 @@ void output_result_yaml(
 	std::cout << "\"time [s]\" : " << time << std::flush;
 	std::cout << ", " << std::flush;
 
-// 	// memory B/W
-// 	std::cout << "\"mem [GB/s]\" : " << mem << std::flush;
-// 	std::cout << ", " << std::flush;
+	// memory B/W
+	std::cout << "\"mem [GB/s]\" : " << mem << std::flush;
+	std::cout << ", " << std::flush;
 
 	// perf
 	std::cout << "\"perf [GFLOPS]\" : " << perf << std::flush;
@@ -92,7 +88,7 @@ void output_result_yaml(
 int main(int argc, char** argv){
 
 	if(argc!=4){
-		std::cout << "error $1:matrix size n (n=m=k), $2: iter, $3: precision (double or float)" << std::endl;
+		std::cout << "error $1:vector size, $2: iter, $3: precision (double or float)" << std::endl;
 		return 1;
 	}
 
