@@ -33,3 +33,20 @@ benchmark\_configの中は気合で読んでください
 
 ## GPU
 none
+
+# Todo
+- benchmark target
+  - cuBLAS support
+  - BLAS関数を増やす
+  - LAPACK Support
+  - FFT support (fftw, cufft)
+  - Himeno Benchmark support
+  - CURAND support
+
+- other
+  - other compiler support
+  - 結果をuploadして共有できる場所と仕組みを用意したい
+  - さすがにHTMLが雑なのできれいに出したい
+  - READMEの英語化
+
+やりきれないくらい課題があるので，手伝ってくれる人が居ましたらissueか[Twitter DM](https://twitter.com/Hishinuma_t)ください
