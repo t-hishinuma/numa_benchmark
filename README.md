@@ -7,23 +7,14 @@ NUMerical  linear  Algebra Benchmark (with docker)
 
 ## Docker
 
-### 設定はデフォルトでいい場合
+```
+git clone git@github.com:t-hishinuma/numa_benchmark.git
+# vim benchmark_config # if need to change
+make benchmark
+```
+output dir. is `$(PROJECT_DIR)/result`
 
-```
-docker run hishinumat/numa_benchmark:latest run
-```
-
-
-### 設定ファイルで自分好みの設定にしたい場合
-```
-wget https://raw.githubusercontent.com/t-hishinuma/numa_benchmark/master/benchmark_config
-```
-
-change benchmark\_config
-
-```
-docker run -v $PWD:/work/ hishinumat/numa_benchmark:latest run
-```
+benchmark\_configの中は気合で読んでください
 
 ## local
 1. install CBLAS
