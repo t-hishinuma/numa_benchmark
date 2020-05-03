@@ -62,5 +62,6 @@ make benchmark-gpu
   - 結果をuploadして共有できる場所と仕組みを用意したい
   - さすがにHTMLが雑なのできれいに出したい
   - READMEの英語化
+  - CIでテスト
 
 やりきれないくらい課題があるので，手伝ってくれる人が居ましたらissueか[Twitter DM](https://twitter.com/Hishinuma_t)ください
