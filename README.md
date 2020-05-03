@@ -47,6 +47,7 @@ make benchmark-gpu
 
 ## GPU
 - ddot, sdot
+- dgemm, sgemm
 
 # Todo
 - benchmark target
