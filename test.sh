@@ -68,6 +68,13 @@ if [ $SGEMM_EXEC = 1 ]; then
 			./src/blas3/gemm_cpu.o $i $SGEMM_TRIAL float
 		done
 	done
+	if type "nvidia-smi" > /dev/null 2>&1; then
+		for (( i = $SGEMM_MIN_SIZE ; i<= $SGEMM_MAX_SIZE ; i=i$SGEMM_INCL ))
+		do
+			export OMP_NUM_THREADS=$th
+			./src/blas3/gemm_gpu.o $i $SGEMM_TRIAL float
+		done
+	fi
 fi
 
 #DGEMM
@@ -80,4 +87,11 @@ if [ $DGEMM_EXEC = 1 ]; then
 			./src/blas3/gemm_cpu.o $i $DGEMM_TRIAL double
 		done
 	done
+	if type "nvidia-smi" > /dev/null 2>&1; then
+		for (( i = $DGEMM_MIN_SIZE ; i<= $DGEMM_MAX_SIZE ; i=i$DGEMM_INCL ))
+		do
+			export OMP_NUM_THREADS=$th
+			./src/blas3/gemm_gpu.o $i $DGEMM_TRIAL double
+		done
+	fi
 fi
