@@ -4,21 +4,23 @@
 #include <vector>
 #include<omp.h>
 
-#define DFUNC_NAME "ddot"
-#define SFUNC_NAME "sdot"
-#define READ_WRITE 2 * size
-#define ORDER 2 * size
+#define DFUNC_NAME "dgemm"
+#define SFUNC_NAME "sgemm"
+#define READ_WRITE size * size * 3
+#define ORDER 2 * size * size * size
 
-inline float func(float* x, float* y, const size_t size, cublasHandle_t &handle){
-	float result = 0;
-	cublasSdot(handle, size, x, 1, y, 1, &result);
-	return result;
+inline void func(float* A, float* B, float* C, const size_t size, cublasHandle_t &handle){
+	int n = size;
+	float alpha = 1.0;
+	float beta = 1.0;
+	cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, n, n, n, &alpha, A, n, B, n, &beta, C, n);
 }
 
-inline double func(double* x, double* y, const size_t size, cublasHandle_t &handle){
-	double result = 0;
-	cublasDdot(handle, size, x, 1, y, 1, &result);
-	return result;
+inline void func(double* A, double* B, double* C, const size_t size, cublasHandle_t &handle){
+	int n = size;
+	double alpha = 1.0;
+	double beta = 1.0;
+	cublasDgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, n, n, n, &alpha, A, n, B, n, &beta, C, n);
 }
 
 template <typename T>
@@ -27,19 +29,23 @@ double bench(const size_t size, const size_t iter){
 	cublasStatus_t stat;
 	cublasHandle_t handle;
 
-	std::vector<T> Hostx;
-	std::vector<T> Hosty;
+	std::vector<T> HostA;
+	std::vector<T> HostB;
+	std::vector<T> HostC;
 
-	for(size_t i=0; i<size; i++){
-		Hostx.push_back(rand());
-		Hosty.push_back(rand());
+	for(size_t i=0; i<size*size; i++){
+		HostA.push_back(rand());
+		HostB.push_back(rand());
+		HostC.push_back(0.0);
 	}
 
-	T* Devx;
-	T* Devy;
+	T* DevA;
+	T* DevB;
+	T* DevC;
 
-	cudaStat = cudaMalloc ((void**)&Devx, Hostx.size() * sizeof(T));
-	cudaStat = cudaMalloc ((void**)&Devy, Hosty.size() * sizeof(T));
+	cudaStat = cudaMalloc ((void**)&DevA, size*size * sizeof(T));
+	cudaStat = cudaMalloc ((void**)&DevB, size*size * sizeof(T));
+	cudaStat = cudaMalloc ((void**)&DevC, size*size * sizeof(T));
 
 	if (cudaStat != cudaSuccess) {
 		std::cout << "device memory allocation failed" << std::endl;
@@ -52,33 +58,41 @@ double bench(const size_t size, const size_t iter){
 		return EXIT_FAILURE;
 	}
 
-	stat = cublasSetVector(Hostx.size(), sizeof(T), Hostx.data(), 1, Devx, 1);
+	stat = cublasSetMatrix(size, size, sizeof(T), HostA.data(), size, DevA, size);
 	if (stat != CUBLAS_STATUS_SUCCESS) {
 		std::cout << "data download failed" << std::endl;
-		cudaFree (Devx);
+		cudaFree (DevA);
+		cublasDestroy(handle);
+		return EXIT_FAILURE;
+	}
+	stat = cublasSetMatrix(size, size, sizeof(T), HostB.data(), size, DevB, size);
+	if (stat != CUBLAS_STATUS_SUCCESS) {
+		std::cout << "data download failed" << std::endl;
+		cudaFree (DevB);
+		cublasDestroy(handle);
+		return EXIT_FAILURE;
+	}
+	stat = cublasSetMatrix(size, size, sizeof(T), HostC.data(), size, DevC, size);
+	if (stat != CUBLAS_STATUS_SUCCESS) {
+		std::cout << "data download failed" << std::endl;
+		cudaFree (DevC);
 		cublasDestroy(handle);
 		return EXIT_FAILURE;
 	}
 
-	stat = cublasSetVector(Hosty.size(), sizeof(T), Hosty.data(), 1, Devy, 1);
-	if (stat != CUBLAS_STATUS_SUCCESS) {
-		std::cout << "data download failed" << std::endl;
-		cudaFree (Devy);
-		cublasDestroy(handle);
-		return EXIT_FAILURE;
-	}
 
 	cudaStreamSynchronize(0);
-	T result=0;
+
 	double time = omp_get_wtime();
 	for(size_t i = 0; i < iter; i++){
-		result = func(Devx, Devy, size, handle);
+		func(DevA, DevB, DevC, size, handle);
 	}
 	cudaStreamSynchronize(0);
 	time = (omp_get_wtime() - time) / iter;
 
-	cudaFree (Devx);
-	cudaFree (Devy);
+	cudaFree (DevA);
+	cudaFree (DevB);
+	cudaFree (DevC);
 	cublasDestroy(handle);
 
 	return time;
