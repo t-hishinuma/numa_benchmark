@@ -3,9 +3,12 @@
 
 NUMerical  linear  Algebra Benchmark (with docker)
 
-# How to use 
-configをいじって，configのあるディレクトリをDockerにマウントするとconfigのとおりにベンチマークし，resultにymlとhtmlが出力される．
+* `benchmark_config` を作成してDockerの`/work`にマウントするとベンチマークし，resultにymlとhtmlが出力される．
+* `run`コマンドを与えることによってOpenBLASのコンパイルからベンチマークまでが行われる．
+* OpenBLASのコンパイルオプションは現状OpenBLASのcmakeの判定任せ (SIMDやコア数は判定するはず)
 
+
+# How to use 
 ## Docker
 
 ```
@@ -15,12 +18,14 @@ make benchmark
 ```
 `$(PROJECT_DIR)/result`に結果のymlとhtmlとグラフが生成される
 
-benchmark\_configの中は気合で読んでください
-
 ## local (非推奨)
 1. install CBLAS
 2. `make`
 3. `./test.sh ./benchmark_config`
+
+# benchmark\_configの作成方法
+あとで．大体読めば分かるように作った．．つもり
+
 
 # Requirements
 - git
