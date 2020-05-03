@@ -9,7 +9,7 @@ fi
 
 . $CONFIG
 
-$INITIAL_COMMANDS
+$INITIAL_COMMANDS &> /dev/null
 
 mkdir -p /work/result/
 

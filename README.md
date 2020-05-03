@@ -16,7 +16,7 @@ NUMerical  linear  Algebra Benchmark (with docker)
 結果を集計したい場合は `docker_scripts/yml2html.py` に入力yamlファイルと出力のhtmlのファイル名を与える．
 
 ```
-docker run hishinumat/numa_benchmark > result.yml
+docker run hishinumat/numa_benchmark run > result.yml
 python3 docker_scripts/yml2html.py result.yml result.html
 ```
 
@@ -35,7 +35,8 @@ make benchmark
 `--gpus all` を与えるとGPUのベンチマークが自動的に実行される
 
 ```
-docker run --gpus all --privileged hishinumat/numa_benchmark
+docker run --gpus all --privileged hishinumat/numa_benchmark run > result.yml
+python3 docker_scripts/yml2html.py result.yml result.html
 ```
 
 ### 設定を変更したい場合
