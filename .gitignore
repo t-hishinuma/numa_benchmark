@@ -1,2 +1,4 @@
 *.o
-./result.txt
+result/
+*.html
+*.png

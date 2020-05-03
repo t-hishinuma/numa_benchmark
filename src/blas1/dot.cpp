@@ -52,6 +52,10 @@ void output_result_yaml(
 	// output yaml format
 	std::cout << "- {" << std::flush;
 
+	// type name
+	std::cout << "\"type\" : " << "\"blas1\"" << std::flush;
+	std::cout << ", " << std::flush;
+
 	// func name
 	std::cout << "\"func\" : " << "\"" << func << "\"" << std::flush;
 	std::cout << ", " << std::flush;
