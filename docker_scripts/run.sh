@@ -14,9 +14,8 @@ $INITIAL_COMMANDS
 mkdir -p /work/result/
 
 #CPU Spec
-echo "# get cpu spec..."
-zsh /numa_bench/src/machine_spec/get_cpu_spec.sh > $RESULT_FILE
-zsh /numa_bench/src/machine_spec/get_cpu_spec.sh > $RESULT_FILE
+echo "# get machine spec..."
+zsh /numa_bench/src/machine_spec/get_spec.sh > $RESULT_FILE
 
 #OpenBLAS
 echo "# openblas build start..."

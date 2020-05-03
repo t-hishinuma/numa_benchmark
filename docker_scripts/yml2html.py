@@ -28,9 +28,10 @@ for func in func_list:
             arch_list = set(data["arch"].dropna())
 
             for arch in arch_list:
+                data = df[ (df["func"] == func) & (df["# of threads"] == thread) & (df["arch"] == arch) ]
                 size = data[["size"]].values.tolist()
                 time = data[["time [s]"]].values.tolist()
-                mem = data[["mem [GB/s]"]].values.tolist()
+                mem  = data[["mem [GB/s]"]].values.tolist()
                 perf = data[["perf [GFLOPS]"]].values.tolist()
 
                 if arch == "cpu":
@@ -56,6 +57,7 @@ for func in func_list:
             data = df[ (df["func"] == func) & (df["# of threads"] == thread) ]
             arch_list = set(data["arch"].dropna())
             for arch in arch_list:
+                data = df[ (df["func"] == func) & (df["# of threads"] == thread) & (df["arch"] == arch) ]
                 size = data[["size"]].values.tolist()
                 time = data[["time [s]"]].values.tolist()
                 perf = data[["perf [GFLOPS]"]].values.tolist()
@@ -85,6 +87,7 @@ ph_cpu_num = int(spec_data[["# of physical cpu"]].values)
 cpu_model  = str(spec_data[["CPU model"]].values)
 cores      = int(spec_data[["# of cores"]].values)
 memory     = str(spec_data[["# of memory"]].values)
+GPU        = str(spec_data[["GPU"]].values)
 
 html=open(output_file,'w')
 print('<html>',file=html)
@@ -95,6 +98,7 @@ print ("CPU Model name :", cpu_model, "<br>" , file=html)
 print ("# of physical CPU :", ph_cpu_num, "<br>" , file=html)
 print ("# of cores :", cores, "<br>" , file=html)
 print ("# of memory :", memory, "<br>" , file=html)
+print ("GPU :", GPU, "<br>" , file=html)
 print("</h3>", file=html)
 
 

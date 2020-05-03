@@ -6,7 +6,7 @@
 
 #INITIAL_COMMANDS="echo numa"
 
-OPENBLAS_BUILD=1 # 1 is source build, 0 is apt install
+OPENBLAS_BUILD=0 # 1 is source build, 0 is apt install
 
 #OPENBLAS_CMAKE_OPTION=""
 
