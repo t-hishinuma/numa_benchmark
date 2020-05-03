@@ -4,6 +4,7 @@
 NUMerical  linear  Algebra Benchmark (with docker)
 
 # How to use 
+configをいじって，configのあるディレクトリをDockerにマウントするとconfigのとおりにベンチマークする
 
 ## Docker
 
@@ -20,6 +21,11 @@ benchmark\_configの中は気合で読んでください
 1. install CBLAS
 2. `make`
 3. `./test.sh ./benchmark_config`
+
+# Requirements
+- git
+- make
+- docker
 
 # Current support status
 ## CPU
