@@ -91,7 +91,11 @@ make benchmark-gpu
 
 # 結果のresult.ymlを送るとブラウザ経由で結果を見られるサーバを立ててみました．
 GCPの無料枠を使ってサーバを立ててみました．
-`./docker_scripts/upload.sh result.yml` するとuploadされ，
+`./docker_scripts/upload.sh result.yml` するか，
+コンテナでは `upload` としてパスを通してあるので `run&&upload` するとアップロードされます．
+`make benchmark-upload` か `make benchmark-gpu-upload` でもOKです 
+
+実行すると
 > upload done, your file tag is 1dc1b244
 などと8文字のタグがでてきます．ブラウザでアクセスするとその名前のディレクトリが見えるはずなので，そこに行けば結果が見られます．
 

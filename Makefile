@@ -7,14 +7,22 @@ all:
 docker: Dockerfile clean
 	docker build -t $(REGISTRY) . -f Dockerfile
 
+# CPU
 benchmark: 
 	docker run -v $(PWD):/work $(REGISTRY) run
+
+benchmark-upload: 
+	docker run -v $(PWD):/work $(REGISTRY) run&&upload
 
 in: 
 	docker run -it -v $(PWD):/work $(REGISTRY) 
 
+#GPU
 benchmark-gpu: 
 	docker run --gpus all --privileged -v $(PWD):/work $(REGISTRY) run
+
+benchmark-gpu-upload: 
+	docker run --gpus all --privileged -v $(PWD):/work $(REGISTRY) run&&upload
 
 in-gpu: 
 	docker run --gpus all --privileged -it -v $(PWD):/work $(REGISTRY) 
