@@ -11,11 +11,12 @@ fi
 
 $INITIAL_COMMANDS &> /dev/null
 
+rm -rf /work/result/
 mkdir -p /work/result/
 
 #CPU Spec
 echo "# get machine spec..."
-zsh /numa_bench/src/machine_spec/get_spec.sh > $RESULT_FILE
+zsh /numa_bench/src/machine_spec/get_spec.sh | tee -a $RESULT_FILE
 
 #OpenBLAS
 echo "# openblas build start..."
@@ -31,7 +32,7 @@ echo "# benchmark start..."
 
 #exec
 if [[ -f /work/benchmark_config ]]; then
-	cd /numa_bench/; zsh ./test.sh >> $RESULT_FILE
+	cd /numa_bench/; zsh ./test.sh | tee -a $RESULT_FILE
 
 	cd /work/result/
 	python3 /numa_bench/yml2html.py ./result.yml ./result.html

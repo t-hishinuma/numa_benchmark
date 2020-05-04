@@ -1,14 +1,18 @@
 #!/bin/bash
 IP=34.67.228.30
 
-if [ $# != 1 ]; then
-	echo "error! \$1: filename (result.yml)"
-	exit
+$FILE
+if [ $# == 1 ]; then
+	FILE=$1
+else
+	FILE=/work/result/result.yml
 fi
 
-ret=`curl --upload-file $1 $IP:443`
+echo $FILE
+
+ret=`curl --upload-file $FILE $IP:443`
 
 ret=`echo $ret | rev | cut -c 1-8 | rev`
 
-echo upload done, your file tag is $ret
+echo your hash is $ret
 echo access http://$IP:80
