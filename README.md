@@ -95,9 +95,9 @@ GCPの無料枠を使ってサーバを立ててみました．
 > upload done, your file tag is 1dc1b244
 などと8文字のタグがでてきます．ブラウザでアクセスするとその名前のディレクトリが見えるはずなので，そこに行けば結果が見られます．
 
-** 現状，ろくなセキュリティもなくチェック機構もなく垂れ流しているだけなので注意して下さい．**
+**現状，ろくなセキュリティもなくチェック機構もなく垂れ流しているだけなので注意して下さい．**
+**万が一，誤ったファイルをuploadしてしまった場合にはDM等いただければ削除しますが，情報については何の責任も負えません**
 
-万が一，誤ったファイルをuploadしてしまった場合にはDM等いただければ削除します．
 
 # Acknowledgement
 The development of this software was supported by [termoshtt](https://github.com/termoshtt) and [RICOS Co. Ltd.](https://www.ricos.co.jp/).
