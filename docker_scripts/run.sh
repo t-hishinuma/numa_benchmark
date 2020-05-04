@@ -20,12 +20,12 @@ zsh /numa_bench/src/machine_spec/get_spec.sh | tee -a $RESULT_FILE
 
 #OpenBLAS
 echo "# openblas build start..."
-/numa_bench/openblas_build.sh $CONFIG &> /work/result/cblas.log
+/numa_bench/openblas_build.sh $CONFIG &> /work/result/cblas_build.log
 
 
 # build benchmark code
 echo "# benchmark code build start..."
-cd /numa_bench/src/; make -j &> /dev/null
+cd /numa_bench/src/; make -j &> src_build.log
 
 
 echo "# benchmark start..."
@@ -39,5 +39,8 @@ if [[ -f /work/benchmark_config ]]; then
 else
 	cd /numa_bench/; zsh ./test.sh
 fi
+
+# clean
+cd /numa_bench/src/; make clean &> /dev/null
 
 echo "# finish"
