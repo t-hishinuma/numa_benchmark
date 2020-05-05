@@ -1,5 +1,30 @@
 #!/bin/zsh
-#
+
+function blas_exec(){
+	EXEC=$1; MIN=$2; MAX=$3; INCL=$4; TRY=$5; BIN=$6; PREC=$7
+
+	#SDOT
+	if [ $EXEC = 1 ]; then
+		for th in "${array[@]}"
+		do
+			for (( i = $MIN ; i<= $MAX ; i=i$INCL ))
+			do
+				export OMP_NUM_THREADS=$th
+				${BIN}_cpu.o $i $TRY $PREC
+			done
+		done
+		if type "nvidia-smi" > /dev/null 2>&1; then
+			for (( i = $MIN ; i<= $MAX ; i=i$INCL ))
+			do
+				export OMP_NUM_THREADS=$th
+				${BIN}_gpu.o $i $TRY $PREC
+			done
+		fi
+	fi
+}
+
+# main
+
 if [ $# != 1 ]; then
 	ENVFILE="./benchmark_config"
 else 
@@ -20,78 +45,10 @@ else
 	done
 fi
 
-#SDOT
-if [ $SDOT_EXEC = 1 ]; then
-	for th in "${array[@]}"
-	do
-		for (( i = $SDOT_MIN_SIZE ; i<= $SDOT_MAX_SIZE ; i=i$SDOT_INCL ))
-		do
-			export OMP_NUM_THREADS=$th
-			./src/blas1/dot_cpu.o $i $SDOT_TRIAL float
-		done
-	done
-	if type "nvidia-smi" > /dev/null 2>&1; then
-		for (( i = $SDOT_MIN_SIZE ; i<= $SDOT_MAX_SIZE ; i=i$SDOT_INCL ))
-		do
-			export OMP_NUM_THREADS=$th
-			./src/blas1/dot_gpu.o $i $SDOT_TRIAL float
-		done
-	fi
-fi
+# blas1
+blas_exec $SDOT_EXEC $SDOT_MIN_SIZE $SDOT_MAX_SIZE $SDOT_INCL $SDOT_TRIAL ./src/blas1/dot float
+blas_exec $DDOT_EXEC $DDOT_MIN_SIZE $DDOT_MAX_SIZE $DDOT_INCL $DDOT_TRIAL ./src/blas1/dot double
 
-#DDOT
-if [ $DDOT_EXEC = 1 ]; then
-	for th in "${array[@]}"
-	do
-		for (( i = $DDOT_MIN_SIZE ; i<= $DDOT_MAX_SIZE ; i=i$DDOT_INCL ))
-		do
-			export OMP_NUM_THREADS=$th
-			./src/blas1/dot_cpu.o $i $DDOT_TRIAL double
-		done
-	done
-	if type "nvidia-smi" > /dev/null 2>&1; then
-		for (( i = $DDOT_MIN_SIZE ; i<= $DDOT_MAX_SIZE ; i=i$DDOT_INCL ))
-		do
-			export OMP_NUM_THREADS=$th
-			./src/blas1/dot_gpu.o $i $DDOT_TRIAL double
-		done
-	fi
-fi
-
-#SGEMM
-if [ $SGEMM_EXEC = 1 ]; then
-	for th in "${array[@]}"
-	do
-		for (( i = $SGEMM_MIN_SIZE ; i<= $SGEMM_MAX_SIZE ; i=i$SGEMM_INCL ))
-		do
-			export OMP_NUM_THREADS=$th
-			./src/blas3/gemm_cpu.o $i $SGEMM_TRIAL float
-		done
-	done
-	if type "nvidia-smi" > /dev/null 2>&1; then
-		for (( i = $SGEMM_MIN_SIZE ; i<= $SGEMM_MAX_SIZE ; i=i$SGEMM_INCL ))
-		do
-			export OMP_NUM_THREADS=$th
-			./src/blas3/gemm_gpu.o $i $SGEMM_TRIAL float
-		done
-	fi
-fi
-
-#DGEMM
-if [ $DGEMM_EXEC = 1 ]; then
-	for th in "${array[@]}"
-	do
-		for (( i = $DGEMM_MIN_SIZE ; i<= $DGEMM_MAX_SIZE ; i=i$DGEMM_INCL ))
-		do
-			export OMP_NUM_THREADS=$th
-			./src/blas3/gemm_cpu.o $i $DGEMM_TRIAL double
-		done
-	done
-	if type "nvidia-smi" > /dev/null 2>&1; then
-		for (( i = $DGEMM_MIN_SIZE ; i<= $DGEMM_MAX_SIZE ; i=i$DGEMM_INCL ))
-		do
-			export OMP_NUM_THREADS=$th
-			./src/blas3/gemm_gpu.o $i $DGEMM_TRIAL double
-		done
-	fi
-fi
+# blas3
+blas_exec $SGEMM_EXEC $SGEMM_MIN_SIZE $SGEMM_MAX_SIZE $SGEMM_INCL $SGEMM_TRIAL ./src/blas3/gemm float
+blas_exec $DGEMM_EXEC $DGEMM_MIN_SIZE $DGEMM_MAX_SIZE $DGEMM_INCL $DGEMM_TRIAL ./src/blas3/gemm double

@@ -20,12 +20,11 @@ zsh /numa_bench/src/machine_spec/get_spec.sh | tee -a $RESULT_FILE
 
 #OpenBLAS
 echo "# openblas build start..."
-/numa_bench/openblas_build.sh $CONFIG &> /work/result/cblas_build.log
-
+/numa_bench/openblas_build.sh $CONFIG
 
 # build benchmark code
 echo "# benchmark code build start..."
-cd /numa_bench/src/; make -j &> src_build.log
+cd /numa_bench/src/; make -j &> /work/result/src_build.log
 
 
 echo "# benchmark start..."
