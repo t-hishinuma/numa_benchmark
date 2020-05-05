@@ -1,8 +1,8 @@
 #!/bin/zsh
 
+## BLAS
 function blas_exec(){
 	EXEC=$1; MIN=$2; MAX=$3; INCL=$4; TRY=$5; BIN=$6; PREC=$7
-
 	#SDOT
 	if [ $EXEC = 1 ]; then
 		for th in "${array[@]}"
@@ -23,6 +23,30 @@ function blas_exec(){
 	fi
 }
 
+## FFT
+function fft_exec(){
+	EXEC=$1; MIN=$2; MAX=$3; INCL=$4; TRY=$5; BIN=$6; PREC=$7; TYPE=$8; DIM=$9
+
+	#SDOT
+	if [ $EXEC = 1 ]; then
+		for th in "${array[@]}"
+		do
+			for (( i = $MIN ; i<= $MAX ; i=i$INCL ))
+			do
+				export OMP_NUM_THREADS=$th
+				${BIN}_cpu_${PREC}.o $i $TRY $TYPE $DIM
+			done
+		done
+		if type "nvidia-smi" > /dev/null 2>&1; then
+			for (( i = $MIN ; i<= $MAX ; i=i$INCL ))
+			do
+				export OMP_NUM_THREADS=$th
+				${BIN}_gpu_${PREC}.o $i $TRY $TYPE $DIM
+			done
+		fi
+	fi
+}
+
 # main
 
 if [ $# != 1 ]; then
@@ -36,6 +60,7 @@ fi
 array=()
 
 if [ -n "$THREADS" ]; then
+	MAXTH=`grep processor /proc/cpuinfo | wc -l` 
 	array=($THREADS)
 else
 	MAXTH=`grep processor /proc/cpuinfo | wc -l` 
@@ -52,3 +77,16 @@ blas_exec $DDOT_EXEC $DDOT_MIN_SIZE $DDOT_MAX_SIZE $DDOT_INCL $DDOT_TRIAL ./src/
 # blas3
 blas_exec $SGEMM_EXEC $SGEMM_MIN_SIZE $SGEMM_MAX_SIZE $SGEMM_INCL $SGEMM_TRIAL ./src/blas3/gemm float
 blas_exec $DGEMM_EXEC $DGEMM_MIN_SIZE $DGEMM_MAX_SIZE $DGEMM_INCL $DGEMM_TRIAL ./src/blas3/gemm double
+
+# fft-1D
+fft_exec $SFFT1D_FORWARD_EXEC $SFFT1D_MIN_SIZE $SFFT1D_MAX_SIZE $SFFT1D_INCL $SFFT1D_TRIAL ./src/fft/fft f forward 1
+fft_exec $DFFT1D_BACKWARD_EXEC $DFFT1D_MIN_SIZE $DFFT1D_MAX_SIZE $DFFT1D_INCL $DFFT1D_TRIAL ./src/fft/fft f backward 1
+
+# fft-2D
+fft_exec $SFFT2D_FORWARD_EXEC $SFFT2D_MIN_SIZE $SFFT2D_MAX_SIZE $SFFT2D_INCL $SFFT2D_TRIAL ./src/fft/fft f forward 2
+fft_exec $DFFT2D_BACKWARD_EXEC $DFFT2D_MIN_SIZE $DFFT2D_MAX_SIZE $DFFT2D_INCL $DFFT2D_TRIAL ./src/fft/fft f backward 2
+
+# fft-3D
+fft_exec $SFFT3D_FORWARD_EXEC $SFFT3D_MIN_SIZE $SFFT3D_MAX_SIZE $SFFT3D_INCL $SFFT3D_TRIAL ./src/fft/fft f forward 3
+fft_exec $DFFT3D_BACKWARD_EXEC $DFFT3D_MIN_SIZE $DFFT3D_MAX_SIZE $DFFT3D_INCL $DFFT3D_TRIAL ./src/fft/fft f backward 3
+

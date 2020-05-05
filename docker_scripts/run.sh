@@ -22,6 +22,10 @@ zsh /numa_bench/src/machine_spec/get_spec.sh | tee -a $RESULT_FILE
 echo "# openblas build start..."
 /numa_bench/openblas_build.sh $CONFIG
 
+#FFTW
+echo "# fftw build start..."
+/numa_bench/fftw_build.sh $CONFIG
+
 # build benchmark code
 echo "# benchmark code build start..."
 cd /numa_bench/src/; make -j &> /work/result/src_build.log

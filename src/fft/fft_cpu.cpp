@@ -21,23 +21,44 @@ double bench(const size_t x, const size_t y, const size_t z, const size_t iter, 
 	#pragma omp parallel
 	omp_num = omp_get_num_threads();
 
-	fftwf_plan_with_nthreads(omp_num);
+	FFT_NTHREAD(omp_num);
 
 	in = (FFT_TYPE *)FFT_MALLOC(sizeof(FFT_TYPE) * n);
 	out = (FFT_TYPE *)FFT_MALLOC(sizeof(FFT_TYPE) * n);
 
-	//exec
 	bool forward;
 	if( strcmp(type, "forward") == 0) {
-		plan = FFT_PLAN_DFT_3D(x, y, z, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+		// PLAN
+		if( y == 1 && z == 1){
+			plan = FFT_PLAN_DFT_1D(x, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+		}
+		else if( z == 1){
+			plan = FFT_PLAN_DFT_2D(x, y, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+		}
+		else{
+			plan = FFT_PLAN_DFT_3D(x, y, z, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+		}
+
+		//#EXEC
 		time = omp_get_wtime();
 		for(size_t i = 0; i < iter; ++i) {
 			FFT_EXE(plan);
 		}
 		time = (omp_get_wtime() - time) / (double)iter;
+
 	}
 	else if( strcmp(type, "backward") == 0) {
-		plan = FFT_PLAN_DFT_3D(x, y, z, in, out, FFTW_BACKWARD, FFTW_ESTIMATE);
+		// PLAN
+		if( y == 1 && z == 1){
+			plan = FFT_PLAN_DFT_1D(x, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+		}
+		else if( z == 1){
+			plan = FFT_PLAN_DFT_2D(x, y, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+		}
+		else{
+			plan = FFT_PLAN_DFT_3D(x, y, z, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+		}
+
 		time = omp_get_wtime();
 		for(size_t i = 0; i < iter; ++i) {
 			FFT_EXE(plan);
@@ -121,30 +142,39 @@ void output_result_yaml(
  
 int main(int argc, char** argv){
 
-	if(argc!=6){
+	if(argc!=5){
 		//std::cout << "error $1:vector size, $2: iter, $3: precision (double or float)" << std::endl;
-		std::cout << "error $1:vector size, $2: iter, $3: \"forward\" or \"backward\"" << std::endl;
-		std::cout << "if 1D, y=1, z=1. else if 2D, z=1." << std::endl;
+		std::cout << "error $1:vector size, $2: iter, $3: \"forward\" or \"backward\" $4: dim." << std::endl;
 		return 1;
 	}
 
 	size_t x = atoi(argv[1]);
-	size_t y = atoi(argv[2]);
-	size_t z = atoi(argv[3]);
-	size_t iter = atoi(argv[4]);
-	char* type = argv[5];
+	size_t iter = atoi(argv[2]);
+	char* type = argv[3];
+	size_t dim = atoi(argv[4]);
+	size_t z, y;
 
 	double time = 0;
 
 	char funcname[64];
-	if( y == 1 && z == 1){
-		strcat(funcname,"fft-1D_");
+	if( dim == 3){
+		y = x;
+		z = x;
+		strcat(funcname, "fft3d_");
 	}
-	else if( z == 1){
-		strcat(funcname,"fft-2D_");
+	else if( dim == 2){
+		y = x;
+		z = 1;
+		strcat(funcname, "fft2d_");
+	}
+	else if( dim == 1){
+		y = 1;
+		z = 1;
+		strcat(funcname, "fft1d_");
 	}
 	else{
-		strcat(funcname,"fft-3D_");
+		std::cout << "error, dim is " << dim << std::endl;
+
 	}
 	strcat(funcname, PREC);
 	strcat(funcname, "_");
