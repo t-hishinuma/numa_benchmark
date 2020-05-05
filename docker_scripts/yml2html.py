@@ -16,7 +16,7 @@ df = pandas.DataFrame(yml)
 func_list = set(df["func"].dropna())
 
 # threads list
-thread_list = set(df["# of threads"].dropna())
+thread_list = set(df["threads"].dropna())
 
 figure_list = list()
 
@@ -24,15 +24,15 @@ for func in func_list:
     for thread in thread_list:
         # DOT
         if func == "ddot" or func == "sdot":
-            data = df[ (df["func"] == func) & (df["# of threads"] == thread) ]
+            data = df[ (df["func"] == func) & (df["threads"] == thread) ]
             arch_list = set(data["arch"].dropna())
 
             for arch in arch_list:
-                data = df[ (df["func"] == func) & (df["# of threads"] == thread) & (df["arch"] == arch) ]
+                data = df[ (df["func"] == func) & (df["threads"] == thread) & (df["arch"] == arch) ]
                 size = data[["size"]].values.tolist()
-                time = data[["time [s]"]].values.tolist()
-                mem  = data[["mem [GB/s]"]].values.tolist()
-                perf = data[["perf [GFLOPS]"]].values.tolist()
+                time = data[["time_sec"]].values.tolist()
+                mem  = data[["mem_gb_s"]].values.tolist()
+                perf = data[["perf_gflops"]].values.tolist()
 
                 if arch == "cpu":
                     title = func + "_" + str(int(thread)) + "threads" + "_" + arch
@@ -54,13 +54,13 @@ for func in func_list:
                 figure_list.append( title + ".png" )
         # GEMM
         if func == "dgemm" or func == "sgemm":
-            data = df[ (df["func"] == func) & (df["# of threads"] == thread) ]
+            data = df[ (df["func"] == func) & (df["threads"] == thread) ]
             arch_list = set(data["arch"].dropna())
             for arch in arch_list:
-                data = df[ (df["func"] == func) & (df["# of threads"] == thread) & (df["arch"] == arch) ]
+                data = df[ (df["func"] == func) & (df["threads"] == thread) & (df["arch"] == arch) ]
                 size = data[["size"]].values.tolist()
-                time = data[["time [s]"]].values.tolist()
-                perf = data[["perf [GFLOPS]"]].values.tolist()
+                time = data[["time_sec"]].values.tolist()
+                perf = data[["perf_gflops"]].values.tolist()
 
                 if arch == "cpu":
                     title = func + "_" + str(int(thread)) + "threads" + "_" + arch
@@ -83,21 +83,21 @@ for func in func_list:
 # create html
 
 spec_data = df[ (df["type"] == "info")]
-ph_cpu_num = int(spec_data[["# of physical cpu"]].values)
-cpu_model  = str(spec_data[["CPU model"]].values)
-cores      = int(spec_data[["# of cores"]].values)
-memory     = str(spec_data[["# of memory"]].values)
-GPU        = str(spec_data[["GPU"]].values)
+ph_cpu_num = int(spec_data[["physical_cpu"]].values)
+cpu_model  = str(spec_data[["cpu"]].values)
+cores      = int(spec_data[["cores"]].values)
+memory     = str(spec_data[["memory"]].values)
+GPU        = str(spec_data[["gpu"]].values)
 
 html=open(output_file,'w')
 print('<html>',file=html)
 print('<body>',file=html)
 
 print("<h3>", file=html)
-print ("CPU Model name :", cpu_model, "<br>" , file=html)
-print ("# of physical CPU :", ph_cpu_num, "<br>" , file=html)
-print ("# of cores :", cores, "<br>" , file=html)
-print ("# of memory :", memory, "<br>" , file=html)
+print ("CPUname :", cpu_model, "<br>" , file=html)
+print ("physical_CPU :", ph_cpu_num, "<br>" , file=html)
+print ("cores :", cores, "<br>" , file=html)
+print ("memory :", memory, "<br>" , file=html)
 print ("GPU :", GPU, "<br>" , file=html)
 print("</h3>", file=html)
 

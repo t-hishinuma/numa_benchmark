@@ -65,7 +65,7 @@ void output_result_yaml(
 	std::cout << ", " << std::flush;
 
 	// vector_size
-	std::cout << "\"# of threads\" : " << th << std::flush;
+	std::cout << "\"threads\" : " << th << std::flush;
 	std::cout << ", " << std::flush;
 
 	// vector_size
@@ -73,15 +73,15 @@ void output_result_yaml(
 	std::cout << ", " << std::flush;
 
 	// func name
-	std::cout << "\"time [s]\" : " << time << std::flush;
+	std::cout << "\"time_sec\" : " << time << std::flush;
 	std::cout << ", " << std::flush;
 
 	// memory B/W
-	std::cout << "\"mem [GB/s]\" : " << mem << std::flush;
+	std::cout << "\"mem_gb_s\" : " << mem << std::flush;
 	std::cout << ", " << std::flush;
 
 	// perf
-	std::cout << "\"perf [GFLOPS]\" : " << perf << std::flush;
+	std::cout << "\"perf_gflops\" : " << perf << std::flush;
 	std::cout << "}" << std::endl;
 }
 
