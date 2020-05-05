@@ -23,7 +23,7 @@ figure_list = list()
 for func in func_list:
     for thread in thread_list:
         # DOT
-        if func == "ddot" or func == "sdot":
+        if "dot" in func:
             data = df[ (df["func"] == func) & (df["threads"] == thread) ]
             arch_list = set(data["arch"].dropna())
 
@@ -44,16 +44,16 @@ for func in func_list:
                 plt.xlabel("Vector size") 
                 plt.xscale("log")
 
-                plt.plot(size, time, label="time [sec]")   
-                plt.plot(size, perf, label="performance [GFLOPS]")   
-                plt.plot(size, mem, label="memory speed [GB/s]")   
+                plt.plot(size, time, label="time [sec]", marker="o")
+                plt.plot(size, perf, label="performance [GFLOPS]", marker="o")   
+                plt.plot(size, mem, label="memory speed [GB/s]", marker="o")
 
                 plt.legend(loc="best") 
                 plt.savefig(title + ".png")
                 plt.close()
                 figure_list.append( title + ".png" )
         # GEMM
-        if func == "dgemm" or func == "sgemm":
+        if "gemm" in func:
             data = df[ (df["func"] == func) & (df["threads"] == thread) ]
             arch_list = set(data["arch"].dropna())
             for arch in arch_list:
@@ -72,8 +72,34 @@ for func in func_list:
                 plt.xlabel("Matrix size N (N = M = K)") 
                 #plt.xscale("log")
 
-                plt.plot(size, time, label="time [sec]")   
-                plt.plot(size, perf, label="performance [GFLOPS]")   
+                plt.plot(size, time, label="time [sec]", marker="o")
+                plt.plot(size, perf, label="performance [GFLOPS]", marker="o")   
+
+                plt.legend(loc="best") 
+                plt.savefig(title + ".png")
+                plt.close()
+                figure_list.append( title + ".png" )
+        if 'fft' in func:
+            data = df[ (df["func"] == func) & (df["threads"] == thread) ]
+            arch_list = set(data["arch"].dropna())
+            for arch in arch_list:
+                data = df[ (df["func"] == func) & (df["threads"] == thread) & (df["arch"] == arch) ]
+                size = data[["size"]].values.tolist()
+                time = data[["time_sec"]].values.tolist()
+                perf = data[["perf_gflops"]].values.tolist()
+
+                if arch == "cpu":
+                    title = func + "_" + str(int(thread)) + "threads" + "_" + arch
+                else:
+                    title = func + "_" + arch
+
+                plt.title(title)
+
+                plt.xlabel("size") 
+                plt.xscale("log", basex=2)
+
+                plt.plot(size, time, label="time [sec]", marker="o")
+                plt.plot(size, perf, label="performance [GFLOPS]", marker="o")   
 
                 plt.legend(loc="best") 
                 plt.savefig(title + ".png")
