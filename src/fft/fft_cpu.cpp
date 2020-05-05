@@ -128,7 +128,7 @@ void output_result_yaml(
 	std::cout << ", " << std::flush;
 
 	// vector_size
-	std::cout << "\"size\" : " << "\"" << x << std::flush;
+	std::cout << "\"size\" : " << x << std::flush;
 	std::cout << ", " << std::flush;
 
 	// func name
