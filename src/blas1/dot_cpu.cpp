@@ -64,7 +64,7 @@ void output_result_yaml(
 	std::cout << "\"arch\" : " << "\"cpu\"" << std::flush;
 	std::cout << ", " << std::flush;
 
-	// vector_size
+	// thread
 	std::cout << "\"threads\" : " << th << std::flush;
 	std::cout << ", " << std::flush;
 
@@ -72,7 +72,7 @@ void output_result_yaml(
 	std::cout << "\"size\" : " << size << std::flush;
 	std::cout << ", " << std::flush;
 
-	// func name
+	// time
 	std::cout << "\"time_sec\" : " << time << std::flush;
 	std::cout << ", " << std::flush;
 

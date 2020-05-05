@@ -110,7 +110,7 @@ void output_result_yaml(
 	std::cout << "\"arch\" : " << "\"gpu\"" << std::flush;
 	std::cout << ", " << std::flush;
 
-	// vector_size
+	// threads
 	std::cout << "\"threads\" : " << th << std::flush;
 	std::cout << ", " << std::flush;
 
@@ -122,8 +122,8 @@ void output_result_yaml(
 	std::cout << "\"time_sec\" : " << time << std::flush;
 	std::cout << ", " << std::flush;
 
-	// memory B/W
-	std::cout << "\"mem_gb_s\" : " << mem << std::flush;
+	// time
+	std::cout << "\"time_sec\" : " << time << std::flush;
 	std::cout << ", " << std::flush;
 
 	// perf
