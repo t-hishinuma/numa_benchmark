@@ -5,9 +5,10 @@ if [[ $OPENBLAS_BUILD = 1 ]]; then
 
 	printf "-"
    	printf " {"
-	printf "\"type\" : \"info\", "
-	printf "\"openblas_build\" : \"source\", "
-	printf "\"openblas_option\" : \"$OPENBLAS_CMAKE_OPTION\""
+	printf "\"type\" : \"buildlog\", "
+	printf "\"lib\" : \"openblas\", "
+	printf "\"how\" : \"source\", "
+	printf "\"option\" : \"$OPENBLAS_CMAKE_OPTION $SIMD\""
 	printf "}\n"
 
 	cd /numa_bench/OpenBLAS/; rm -rf build; mkdir build; cd build;\
@@ -18,8 +19,10 @@ else
 
 	printf "-"
    	printf " {"
-	printf "\"type\" : \"info\", "
-	printf "\"openblas_build\" : \"apt\""
+	printf "\"type\" : \"buildlog\", "
+	printf "\"lib\" : \"openblas\", "
+	printf "\"how\" : \"apt\", "
+	printf "\"option\" : \"none\""
 	printf "}\n"
 
 	apt update -y &>> /work/result/cblas_build.log

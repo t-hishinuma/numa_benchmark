@@ -20,11 +20,11 @@ zsh /numa_bench/src/machine_spec/get_spec.sh | tee -a $RESULT_FILE
 
 #OpenBLAS
 echo "# openblas build start..."
-/numa_bench/openblas_build.sh $CONFIG
+/numa_bench/openblas_build.sh $CONFIG | tee -a $RESULT_FILE
 
 #FFTW
 echo "# fftw build start..."
-/numa_bench/fftw_build.sh $CONFIG
+/numa_bench/fftw_build.sh $CONFIG | tee -a $RESULT_FILE
 
 # build benchmark code
 echo "# benchmark code build start..."

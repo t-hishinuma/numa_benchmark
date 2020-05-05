@@ -16,9 +16,10 @@ if [[ $FFTW_BUILD = 1 ]]; then
 
 	printf "-"
    	printf " {"
-	printf "\"type\" : \"info\", "
-	printf "\"fftw build\" : \"source\", "
-	printf "\"fftw option\" : \"$OPENBLAS_CMAKE_OPTION $SIMD\""
+	printf "\"type\" : \"buildlog\", "
+	printf "\"lib\" : \"fftw\", "
+	printf "\"how\" : \"source\", "
+	printf "\"option\" : \"$FFTW_CMAKE_OPTION $SIMD\""
 	printf "}\n"
 
 	# float
@@ -37,8 +38,10 @@ else
 
 	printf "-"
    	printf " {"
-	printf "\"type\" : \"info\", "
-	printf "\"fftw build\" : \"apt\""
+	printf "\"type\" : \"buildlog\", "
+	printf "\"lib\" : \"fftw\", "
+	printf "\"how\" : \"apt\", "
+	printf "\"option\" : \"none\""
 	printf "}\n"
 
 	apt update -y &> /work/result/cblas_build.log
