@@ -39,6 +39,7 @@ double bench(const size_t x, const size_t y, const size_t z, const size_t iter, 
 			plan = FFT_PLAN_DFT_3D(x, y, z, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
 		}
 
+		FFT_EXE(plan);
 		//#EXEC
 		time = omp_get_wtime();
 		for(size_t i = 0; i < iter; ++i) {
@@ -59,6 +60,7 @@ double bench(const size_t x, const size_t y, const size_t z, const size_t iter, 
 			plan = FFT_PLAN_DFT_3D(x, y, z, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
 		}
 
+		FFT_EXE(plan);
 		time = omp_get_wtime();
 		for(size_t i = 0; i < iter; ++i) {
 			FFT_EXE(plan);
