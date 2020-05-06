@@ -4,7 +4,7 @@ LABEL maintainer "Toshiaki Hishinuma <hishinuma.toshiaki@gmail.com>"
 RUN apt update -y \
 	&& apt install -y python3 python3-matplotlib python3-pandas python3-yaml \
 	&&  apt install -y make cmake git zsh curl wget\
-	&&  apt install -y gcc gfortran \
+	&&  apt install -y gcc g++ gfortran \
 	&& apt install -y cuda-cublas-dev-10-0 cuda-cudart-dev-10-2 cuda-compiler-10.2 \
 	&& apt install -y cuda-cufft-dev-10.2
 
