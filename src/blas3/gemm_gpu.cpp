@@ -9,15 +9,13 @@
 #define READ_WRITE size * size * 3
 #define ORDER 2 * size * size * size
 
-inline void func(float* A, float* B, float* C, const size_t size, cublasHandle_t &handle){
-	int n = size;
+inline void func(float* A, float* B, float* C, const size_t n, cublasHandle_t &handle){
 	float alpha = 1.0;
 	float beta = 1.0;
 	cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, n, n, n, &alpha, A, n, B, n, &beta, C, n);
 }
 
-inline void func(double* A, double* B, double* C, const size_t size, cublasHandle_t &handle){
-	int n = size;
+inline void func(double* A, double* B, double* C, const size_t n, cublasHandle_t &handle){
 	double alpha = 1.0;
 	double beta = 1.0;
 	cublasDgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, n, n, n, &alpha, A, n, B, n, &beta, C, n);
@@ -80,6 +78,7 @@ double bench(const size_t size, const size_t iter){
 	}
 
 
+	func(DevA, DevB, DevC, size, handle);
 	cudaStreamSynchronize(0);
 
 	double time = omp_get_wtime();
@@ -104,7 +103,6 @@ void output_result_yaml(
 		const size_t prec
 		){
 
-	double mem = READ_WRITE * prec / time / 1.0e+9;
 	double perf = ORDER / time / 1.0e+9;
 	double th = omp_get_max_threads();
 

@@ -9,13 +9,11 @@
 #define READ_WRITE size * size * 3
 #define ORDER 2 * size * size * size
 
-inline void func(std::vector<float> &A, std::vector<float> &B, std::vector<float> &C, const size_t size){
-	int n = size;
+inline void func(const std::vector<float> &A, const std::vector<float> &B, std::vector<float> &C, const size_t n){
 	cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, n, n, n, 1.0, A.data(), n, B.data(), n, 1.0, C.data(), n);
 }
 
-inline void func(std::vector<double> &A, std::vector<double> &B, std::vector<double> &C, const size_t size){
-	int n = size;
+inline void func(const std::vector<double> &A, const std::vector<double> &B, std::vector<double> &C, const size_t n){
 	cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, n, n, n, 1.0, A.data(), n, B.data(), n, 1.0, C.data(), n);
 }
 
@@ -25,19 +23,21 @@ double bench(const size_t size, const size_t iter){
 	std::vector<T> A(size*size);
 	std::vector<T> B(size*size);
 	std::vector<T> C(size*size, 0.0);
-	openblas_set_num_threads(omp_get_max_threads());
 
+	openblas_set_num_threads(omp_get_max_threads());
  	if(omp_get_max_threads() != openblas_get_num_threads()){
  		printf("# error, OpenBLAS does not support multi-threading? (env=%d, openblas:%d)", omp_get_max_threads(), openblas_get_num_threads());
 		exit;
  	}
 
+	#pragma omp parallel for
 	for(size_t i=0; i<size*size; i++){
 		A[i] = i;
 		B[i] = 123.0;
 	}
 
 	func(A, B, C, size);
+
 	double time = omp_get_wtime();
 	for(size_t i = 0; i < iter; i++){
 		func(A, B, C, size);
@@ -54,7 +54,6 @@ void output_result_yaml(
 		const size_t prec
 		){
 
-	double mem = READ_WRITE * prec / time / 1.0e+9;
 	double perf = ORDER / time / 1.0e+9;
 	double th = omp_get_max_threads();
 
