@@ -67,6 +67,9 @@ make benchmark-gpu
 ## CPU
 - ddot, sdot
 - dgemm, sgemm
+- 1D FFT (forward/backward)
+- 2D FFT (forward/backward)
+- 3D FFT (forward/backward)
 
 ## GPU
 - ddot, sdot
@@ -75,14 +78,14 @@ make benchmark-gpu
 # Todo
 - benchmark target
   - BLAS関数を増やす
-  - LAPACK Support
-  - FFT support (fftw, cufft)
+  - FFT support (cufft)
   - Himeno Benchmark support
+  - LAPACK Support (LU)
   - CURAND support
 
 - other
   - other compiler support
-  - 結果をuploadして共有できる場所と仕組みを用意したい
+  - upload server security
   - さすがにHTMLが雑なのできれいに出したい
   - READMEの英語化
   - CIでテスト
