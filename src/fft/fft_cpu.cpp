@@ -158,7 +158,7 @@ int main(int argc, char** argv){
 
 	double time = 0;
 
-	char funcname[64];
+	char funcname[64] = "";
 	if( dim == 3){
 		y = x;
 		z = x;
