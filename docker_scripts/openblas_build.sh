@@ -11,10 +11,14 @@ if [[ $OPENBLAS_BUILD = 1 ]]; then
 	printf "\"option\" : \"$OPENBLAS_CMAKE_OPTION $SIMD\""
 	printf "}\n"
 
-	cd /numa_bench/OpenBLAS/; rm -rf build; mkdir build; cd build;\
-	cmake .. $OPENBLAS_CMAKE_OPTION &>> /work/result/cblas_build.log
-	make -j &>> /work/result/cblas_build.log
-	make install &>> /work/result/cblas_build.log
+# 	cd /numa_bench/OpenBLAS/; rm -rf build; mkdir build; cd build;\
+# 	cmake .. $OPENBLAS_CMAKE_OPTION &>> /work/result/cblas_build.log
+# 	make -j &>> /work/result/cblas_build.log
+# 	make install &>> /work/result/cblas_build.log
+ 	cd /numa_bench/OpenBLAS/
+	make -j &> /work/result/cblas_build.log
+	make install &> /work/result/cblas_build.log
+	cd - &> /den/null
 else
 
 	printf "-"

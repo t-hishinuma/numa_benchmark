@@ -22,9 +22,9 @@ RUN mkdir /numa_bench; cd /numa_bench \
 	&& cd /
 
 # ENV
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/lib/:/usr/local/cuda-10.2/lib64/:/usr/local/cuda-10.0/lib64/
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/lib/:/usr/local/cuda-10.2/lib64/:/usr/local/cuda-10.0/lib64/:/opt/OpenBLAS/lib/
 ENV LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/lib/:/usr/local/cuda-10.2/lib64/:/usr/local/cuda-10.0/lib64/
-ENV CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH:/usr/local/include/openblas/:/usr/local/cuda-10.2/include/:/usr/local/cuda-10.0/targets/x86_64-linux/include
+ENV CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH:/usr/local/include/openblas/:/usr/local/cuda-10.2/include/:/usr/local/cuda-10.0/targets/x86_64-linux/include:/opt/OpenBLAS/include/
 # source copy
 COPY ./docker_scripts/run.sh /usr/local/bin/run
 COPY ./docker_scripts/upload.sh /usr/local/bin/upload
