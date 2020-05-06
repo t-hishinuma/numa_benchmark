@@ -9,13 +9,13 @@
 #define READ_WRITE 2 * size
 #define ORDER 2 * size
 
-inline float func(float* x, float* y, const size_t size, cublasHandle_t &handle){
+inline float func(const float* x, const float* y, const size_t size, cublasHandle_t &handle){
 	float result = 0;
 	cublasSdot(handle, size, x, 1, y, 1, &result);
 	return result;
 }
 
-inline double func(double* x, double* y, const size_t size, cublasHandle_t &handle){
+inline double func(const double* x, const double* y, const size_t size, cublasHandle_t &handle){
 	double result = 0;
 	cublasDdot(handle, size, x, 1, y, 1, &result);
 	return result;
@@ -30,6 +30,7 @@ double bench(const size_t size, const size_t iter){
 	std::vector<T> Hostx(size);
 	std::vector<T> Hosty(size);
 
+	#pragma omp parallel for
 	for(size_t i=0; i<size; i++){
 		Hostx[i] = i;
 		Hosty[i] = 123.0;

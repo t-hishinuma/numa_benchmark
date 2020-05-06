@@ -9,11 +9,11 @@
 #define READ_WRITE 2 * size
 #define ORDER 2 * size
 
-inline float func(std::vector<float> &x, std::vector<float> &y){
+inline float func(const std::vector<float> &x, const std::vector<float> &y){
 	return  cblas_sdot(x.size(), x.data(), 1,  y.data(), 1);
 }
 
-inline double func(std::vector<double> &x, std::vector<double> &y){
+inline double func(const std::vector<double> &x, const std::vector<double> &y){
 	return  cblas_ddot(x.size(), x.data(), 1,  y.data(), 1);
 }
 
@@ -30,12 +30,14 @@ double bench(const size_t size, const size_t iter){
 		exit;
  	}
 
+	#pragma omp parallel for
 	for(size_t i=0; i<size; i++){
 		x[i] = i;
 		y[i] = 123.0;
 	}
 
 	ans = func(x, y);
+
 	double time = omp_get_wtime();
 	for(size_t i = 0; i < iter; i++){
 		ans = func(x, y);
