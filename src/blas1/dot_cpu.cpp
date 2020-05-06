@@ -20,15 +20,22 @@ inline double func(std::vector<double> &x, std::vector<double> &y){
 template<typename T>
 double bench(const size_t size, const size_t iter){
 	
-	std::vector<T> x;
-	std::vector<T> y;
+	std::vector<T> x(size);
+	std::vector<T> y(size);
 	T ans = 0;
+	openblas_set_num_threads(omp_get_max_threads());
+
+ 	if(omp_get_max_threads() != openblas_get_num_threads()){
+ 		printf("# error, OpenBLAS does not support multi-threading? (env=%d, openblas:%d)", omp_get_max_threads(), openblas_get_num_threads());
+		exit;
+ 	}
 
 	for(size_t i=0; i<size; i++){
-		x.push_back(rand());
-		y.push_back(rand());
+		x[i] = i;
+		y[i] = 123.0;
 	}
 
+	ans = func(x, y);
 	double time = omp_get_wtime();
 	for(size_t i = 0; i < iter; i++){
 		ans = func(x, y);

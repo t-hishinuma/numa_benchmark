@@ -27,12 +27,12 @@ double bench(const size_t size, const size_t iter){
 	cublasStatus_t stat;
 	cublasHandle_t handle;
 
-	std::vector<T> Hostx;
-	std::vector<T> Hosty;
+	std::vector<T> Hostx(size);
+	std::vector<T> Hosty(size);
 
 	for(size_t i=0; i<size; i++){
-		Hostx.push_back(rand());
-		Hosty.push_back(rand());
+		Hostx[i] = i;
+		Hosty[i] = 123.0;
 	}
 
 	T* Devx;
