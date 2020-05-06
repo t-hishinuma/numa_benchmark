@@ -32,7 +32,7 @@ if [[ $FFTW_BUILD = 1 ]]; then
 	./configure $SIMD --enable-threads --enable-openmp --enable-shared &> /work/result/fft_build.log
 	make -j &> /work/result/fft_build.log
 	make install &> /work/result/fft_build.log 
-	cd -
+	cd - &> /dev/null
 
 else
 
