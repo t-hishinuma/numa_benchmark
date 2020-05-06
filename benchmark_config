@@ -59,7 +59,7 @@ SFFT1D_BACKWARD_EXEC=1 # 1 or 0
 SFFT1D_MIN_SIZE=128
 SFFT1D_MAX_SIZE=2048
 SFFT1D_INCL="*2" # e.g.) "+10", "*100"
-SFFT1D_TRIAL=10 # for average
+SFFT1D_TRIAL=100 # for average
 
 # 1D FFT (in double precision) #####################
 
@@ -68,7 +68,7 @@ DFFT1D_BACKWARD_EXEC=1 # 1 or 0
 DFFT1D_MIN_SIZE=128
 DFFT1D_MAX_SIZE=2048
 DFFT1D_INCL="*2" # e.g.) "+10", "*100"
-DFFT1D_TRIAL=10 # for average
+DFFT1D_TRIAL=100 # for average
 
 # 2D FFT (in single precision) #####################
 
@@ -77,7 +77,7 @@ SFFT2D_BACKWARD_EXEC=1 # 1 or 0
 SFFT2D_MIN_SIZE=128
 SFFT2D_MAX_SIZE=2048
 SFFT2D_INCL="*2" # e.g.) "+10", "*100"
-SFFT2D_TRIAL=10 # for average
+SFFT2D_TRIAL=100 # for average
 
 # 2D FFT (in double precision) #####################
 
@@ -86,7 +86,7 @@ DFFT2D_BACKWARD_EXEC=1 # 1 or 0
 DFFT2D_MIN_SIZE=128
 DFFT2D_MAX_SIZE=2048
 DFFT2D_INCL="*2" # e.g.) "+10", "*100"
-DFFT2D_TRIAL=10 # for average
+DFFT2D_TRIAL=100 # for average
 
 # 3D FFT (in single precision) #####################
 
@@ -95,7 +95,7 @@ SFFT3D_BACKWARD_EXEC=1 # 1 or 0
 SFFT3D_MIN_SIZE=128
 SFFT3D_MAX_SIZE=2048
 SFFT3D_INCL="*2" # e.g.) "+10", "*100"
-SFFT3D_TRIAL=10 # for average
+SFFT3D_TRIAL=100 # for average
 
 # 3D FFT (in double precision) #####################
 
@@ -104,4 +104,4 @@ DFFT3D_BACKWARD_EXEC=1 # 1 or 0
 DFFT3D_MIN_SIZE=128
 DFFT3D_MAX_SIZE=2048
 DFFT3D_INCL="*2" # e.g.) "+10", "*100"
-DFFT3D_TRIAL=10 # for average
+DFFT3D_TRIAL=100 # for average
