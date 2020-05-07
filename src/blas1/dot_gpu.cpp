@@ -119,12 +119,12 @@ void output_result_yaml(
 	std::cout << "\"size\" : " << size << std::flush;
 	std::cout << ", " << std::flush;
 
-	// func name
+	// time
 	std::cout << "\"time_sec\" : " << time << std::flush;
 	std::cout << ", " << std::flush;
 
-	// time
-	std::cout << "\"time_sec\" : " << time << std::flush;
+	// memory B/W
+	std::cout << "\"mem_gb_s\" : " << mem << std::flush;
 	std::cout << ", " << std::flush;
 
 	// perf
