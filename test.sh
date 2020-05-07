@@ -37,13 +37,13 @@ function fft_exec(){
 				${BIN}_cpu_${PREC}.o $i $TRY $TYPE $DIM
 			done
 		done
-		if type "nvidia-smi" > /dev/null 2>&1; then
-			for (( i = $MIN ; i<= $MAX ; i=i$INCL ))
-			do
-				export OMP_NUM_THREADS=$th
-				${BIN}_gpu_${PREC}.o $i $TRY $TYPE $DIM
-			done
-		fi
+# 		if type "nvidia-smi" > /dev/null 2>&1; then
+# 			for (( i = $MIN ; i<= $MAX ; i=i$INCL ))
+# 			do
+# 				export OMP_NUM_THREADS=$th
+# 				${BIN}_gpu_${PREC}.o $i $TRY $TYPE $DIM
+# 			done
+# 		fi
 	fi
 }
 

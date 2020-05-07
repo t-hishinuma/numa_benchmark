@@ -18,7 +18,7 @@ if [[ $OPENBLAS_BUILD = 1 ]]; then
  	cd /numa_bench/OpenBLAS/
 	make -j &> /work/result/cblas_build.log
 	make install &> /work/result/cblas_build.log
-	cd - &> /den/null
+	cd - &> /dev/null
 else
 
 	printf "-"
