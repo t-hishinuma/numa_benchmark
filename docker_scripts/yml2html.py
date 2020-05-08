@@ -127,6 +127,7 @@ print ("memory :", memory, "<br>" , file=html)
 print ("GPU :", GPU, "<br>" , file=html)
 print("</h3>", file=html)
 
+print("== Click to Open ==", file=html)
 
 for func in func_list:
     print("<details>", file=html)
@@ -134,6 +135,8 @@ for func in func_list:
     print(s, file=html)
     
     for thread in thread_list:
+        data = df[ (df["func"] == func) & (df["threads"] == thread) ]
+        arch_list = set(data["arch"].dropna())
         for arch in arch_list:
             if arch == "cpu":
                 img = func + "_" + str(int(thread)) + "threads" + "_" + arch + ".png"
