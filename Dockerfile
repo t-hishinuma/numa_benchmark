@@ -28,5 +28,6 @@ ENV CPLUS_INCLUDE_PATH $CPLUS_INCLUDE_PATH:/usr/local/include/openblas/:/usr/loc
 # source copy
 COPY ./docker_scripts/run.sh /usr/local/bin/run
 COPY ./docker_scripts/upload.sh /usr/local/bin/upload
+COPY ./docker_scripts/run-upload.sh /usr/local/bin/run-upload
 COPY ./docker_scripts/* ./test.sh ./benchmark_config /numa_bench/
 COPY ./src/ /numa_bench/src/

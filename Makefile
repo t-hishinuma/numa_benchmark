@@ -12,7 +12,7 @@ benchmark:
 	docker run -v $(PWD):/work $(REGISTRY) run
 
 benchmark-upload: 
-	docker run -v $(PWD):/work $(REGISTRY) /bin/bash -c "run; upload"
+	docker run -v $(PWD):/work $(REGISTRY) /bin/bash -c run-upload
 
 in: 
 	docker run -it -v $(PWD):/work $(REGISTRY) 
@@ -22,7 +22,7 @@ benchmark-gpu:
 	docker run --gpus all --privileged -v $(PWD):/work $(REGISTRY) run
 
 benchmark-gpu-upload: 
-	docker run --gpus all --privileged -v $(PWD):/work $(REGISTRY) /bin/bash -c "run; upload"
+	docker run --gpus all --privileged -v $(PWD):/work $(REGISTRY) /bin/bash -c run-upload
 
 
 in-gpu: 
