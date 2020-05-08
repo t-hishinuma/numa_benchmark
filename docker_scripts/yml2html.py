@@ -128,9 +128,21 @@ print ("GPU :", GPU, "<br>" , file=html)
 print("</h3>", file=html)
 
 
-for fig in figure_list:
-    s = "<img src = \"" + fig + "\">"
+for func in func_list:
+    print("<details>", file=html)
+    s = "<summary>" + func + "</summary>"
     print(s, file=html)
+    
+    for thread in thread_list:
+        for arch in arch_list:
+            if arch == "cpu":
+                img = func + "_" + str(int(thread)) + "threads" + "_" + arch + ".png"
+            else:
+                img = func + "_" + arch + ".png"
+
+            s = "<img src = \"" + img + "\">"
+            print(s, file=html)
+    print("</details>", file=html)
 
 print('</body>',file=html)
 print('</html>',file=html)
