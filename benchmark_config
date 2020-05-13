@@ -9,6 +9,12 @@
 OPENBLAS_BUILD=1 # 1 is source build, 0 is apt install
 FFTW_BUILD=1 # 1 is source build, 0 is apt install
 
+OPENBLAS_VERSION=v0.3.9 # if OPENBLAS_BUILD=1
+OPENBLAS_SRC=https://github.com/xianyi/OpenBLAS.git # if OPENBLAS_BUILD=1
+
+FFTW_VERSION=3.3.8
+FFTW_SRC=http://www.fftw.org/fftw-$FFTW_VERSION.tar.gz # if FFTW_BUILD=1
+
 #OPENBLAS_CMAKE_OPTION=""
 #FFTW_CMAKE_OPTION=""
 
