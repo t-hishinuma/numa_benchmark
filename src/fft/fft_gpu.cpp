@@ -1,4 +1,6 @@
-#include<fftw3.h>
+#include<cuda.h>
+#include<cuda_runtime.h>
+#include<cufftw.h>
 #include<omp.h>
 #include<math.h>
 #include<vector>
@@ -11,6 +13,8 @@
 
 double bench(const size_t x, const size_t y, const size_t z, const size_t iter, const char* type){
 	size_t n = x * y * z;
+	cudaError_t cudaStat;    
+
 	FFT_TYPE *in, *out;
 	FFT_PLAN plan;
 	double time = 0;
@@ -20,22 +24,34 @@ double bench(const size_t x, const size_t y, const size_t z, const size_t iter, 
 	#pragma omp parallel
 	omp_num = omp_get_num_threads();
 
-	FFT_NTHREAD(omp_num);
-
 	in = (FFT_TYPE *)FFT_MALLOC(sizeof(FFT_TYPE) * n);
 	out = (FFT_TYPE *)FFT_MALLOC(sizeof(FFT_TYPE) * n);
+
+	FFT_TYPE* DevIn;
+	FFT_TYPE* DevOut;
+
+	cudaStat = cudaMalloc ((void**)&DevIn, n * sizeof(FFT_TYPE));
+	cudaStat = cudaMalloc ((void**)&DevOut, n * sizeof(FFT_TYPE));
+
+	if (cudaStat != cudaSuccess) {
+		std::cout << "device memory allocation failed" << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	cudaMemcpy(in, DevIn, n, cudaMemcpyDeviceToHost);
+	cudaMemcpy(out, DevOut, n, cudaMemcpyDeviceToHost);
 
 	bool forward;
 	if( strcmp(type, "forward") == 0) {
 		// PLAN
 		if( y == 1 && z == 1){
-			plan = FFT_PLAN_DFT_1D(x, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+			plan = FFT_PLAN_DFT_1D(x, DevIn, DevOut, FFTW_FORWARD, FFTW_ESTIMATE);
 		}
 		else if( z == 1){
-			plan = FFT_PLAN_DFT_2D(x, y, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+			plan = FFT_PLAN_DFT_2D(x, y, DevIn, DevOut, FFTW_FORWARD, FFTW_ESTIMATE);
 		}
 		else{
-			plan = FFT_PLAN_DFT_3D(x, y, z, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+			plan = FFT_PLAN_DFT_3D(x, y, z, DevIn, DevOut, FFTW_FORWARD, FFTW_ESTIMATE);
 		}
 
 		FFT_EXE(plan);
@@ -50,13 +66,13 @@ double bench(const size_t x, const size_t y, const size_t z, const size_t iter, 
 	else if( strcmp(type, "backward") == 0) {
 		// PLAN
 		if( y == 1 && z == 1){
-			plan = FFT_PLAN_DFT_1D(x, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+			plan = FFT_PLAN_DFT_1D(x, DevIn, DevOut, FFTW_FORWARD, FFTW_ESTIMATE);
 		}
 		else if( z == 1){
-			plan = FFT_PLAN_DFT_2D(x, y, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+			plan = FFT_PLAN_DFT_2D(x, y, DevIn, DevOut, FFTW_FORWARD, FFTW_ESTIMATE);
 		}
 		else{
-			plan = FFT_PLAN_DFT_3D(x, y, z, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+			plan = FFT_PLAN_DFT_3D(x, y, z, DevIn, DevOut, FFTW_FORWARD, FFTW_ESTIMATE);
 		}
 
 		FFT_EXE(plan);

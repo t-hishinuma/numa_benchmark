@@ -1,5 +1,4 @@
 CXX=g++
-
 CPU_CXXFLAGS?=-O3 -fopenmp
 
 # float
@@ -33,10 +32,11 @@ D_PREC=	-DFFT_TYPE=$(D_LIB_PREC)_complex \
 		-DFFT_NTHREAD=$(D_LIB_PREC)_plan_with_nthreads \
 		-DPREC=\"double\"
 
+#GPU
 GPU_CXXFLAGS?=-O3 -fopenmp
-GPU_LDFLAGS= -lcufft -lm
+GPU_LDFLAGS= -lcudart -lcufftw -lm
 
-EXES= fft_cpu fft_cpu
+EXES= fft_cpu fft_gpu
 
 .PHONY: all clean
 
@@ -47,7 +47,8 @@ all: $(EXES)
 		$(CXX) $(CPU_CXXFLAGS) $< -o $@_d.o $(D_CPU_LDFLAGS) $(D_PREC)
 
 %_gpu : %_gpu.cpp 
-		$(CXX) $(GPU_CXXFLAGS) $< -o $@.o $(GPU_LDFLAGS)
+		$(CXX) $(GPU_CXXFLAGS) $< -o $@_f.o $(GPU_LDFLAGS) $(F_PREC)
+		$(CXX) $(GPU_CXXFLAGS) $< -o $@_d.o $(GPU_LDFLAGS) $(D_PREC)
 
 clean:
 		@rm -rf $(EXES)*.o
