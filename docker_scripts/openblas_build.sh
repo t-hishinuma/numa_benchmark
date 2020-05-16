@@ -8,17 +8,16 @@ if [[ $OPENBLAS_BUILD = 1 ]]; then
 	printf "\"type\" : \"buildlog\", "
 	printf "\"lib\" : \"openblas\", "
 	printf "\"how\" : \"source\", "
-	printf "\"option\" : \"$OPENBLAS_CMAKE_OPTION $SIMD\""
+	printf "\"version\" : \"$OPENBLAS_VERSION\", "
+	printf "\"option\" : \"$OPENBLAS_CMAKE_OPTION\""
 	printf "}\n"
-
-# 	cd /numa_bench/OpenBLAS/; rm -rf build; mkdir build; cd build;\
-# 	cmake .. $OPENBLAS_CMAKE_OPTION &>> /work/result/cblas_build.log
-# 	make -j &>> /work/result/cblas_build.log
-# 	make install &>> /work/result/cblas_build.log
- 	cd /numa_bench/OpenBLAS/
+	
+ 	cd /numa_bench/
+	git clone $OPENBLAS_SRC -b $OPENBLAS_VERSION ./OpenBLAS &> /dev/null
+	cd OpenBLAS
 	make -j &> /work/result/cblas_build.log
 	make install &> /work/result/cblas_build.log
-	cd - &> /dev/null
+	cd / &> /dev/null
 else
 
 	printf "-"

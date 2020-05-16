@@ -6,6 +6,7 @@ CORE=`cat /proc/cpuinfo | grep processor | wc -l`
 CPUS=`cat /proc/cpuinfo | grep "physical id" | sort -u | wc -l`
 MODEL=`cat /proc/cpuinfo | sed -nr '/model name/ s/.*:\s*(.*)/\1/p' | sort -u`
 MEM=`lsmem | grep "online memory" | awk '{print $4}'`
+GCC=`gcc --version | grep gcc`
 
 # SIMD
 SIMD=""
@@ -43,4 +44,6 @@ printf ", "
 printf "\"memory\" : \"$MEM\""
 printf ", "
 printf "\"gpu\" : \"$GPU\""
+printf ", "
+printf "\"gcc\" : \"$GCC\""
 printf "}\n"

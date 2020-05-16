@@ -19,11 +19,15 @@ if [[ $FFTW_BUILD = 1 ]]; then
 	printf "\"type\" : \"buildlog\", "
 	printf "\"lib\" : \"fftw\", "
 	printf "\"how\" : \"source\", "
+	printf "\"version\" : \"$FFTW_VERSION\", "
 	printf "\"option\" : \"$FFTW_CMAKE_OPTION $SIMD\""
 	printf "}\n"
 
 	# float
-	cd /numa_bench/fftw-3.3.8/
+ 	cd /numa_bench/
+	wget $FFTW_SRC -O fftw.tar.gz &> /dev/null 
+	tar xzf fftw.tar.gz &> /dev/null
+	cd /numa_bench/fftw-$FFTW_VERSION/
 	./configure $SIMD --enable-single --enable-threads --enable-openmp --enable-shared &> /work/result/fft_build.log
 	make -j &> /work/result/fft_build.log
 	make install &> /work/result/fft_build.log 
@@ -32,7 +36,7 @@ if [[ $FFTW_BUILD = 1 ]]; then
 	./configure $SIMD --enable-threads --enable-openmp --enable-shared &> /work/result/fft_build.log
 	make -j &> /work/result/fft_build.log
 	make install &> /work/result/fft_build.log 
-	cd - &> /dev/null
+	cd / &> /dev/null
 
 else
 

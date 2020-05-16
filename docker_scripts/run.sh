@@ -40,7 +40,7 @@ if [[ -f /work/benchmark_config ]]; then
 	cd /work/result/
 	python3 /numa_bench/yml2html.py ./result.yml ./result.html
 else
-	cd /numa_bench/; zsh ./test.sh
+	cd /numa_bench/; zsh ./test.sh | tee -a $RESULT_FILE
 fi
 
 # clean

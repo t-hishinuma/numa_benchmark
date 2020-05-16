@@ -13,13 +13,13 @@ RUN apt update -y \
 RUN apt-get clean \
 	&&  rm -rf /var/lib/apt/lists/* 
 
-# Library download
-RUN mkdir /numa_bench; cd /numa_bench \
-	&& git clone https://github.com/xianyi/OpenBLAS.git /numa_bench/OpenBLAS \
-	&& wget http://www.fftw.org/fftw-3.3.8.tar.gz \
-	&& tar xzf fftw-3.3.8.tar.gz \
-    && rm -rf fftw-3.3.8.tar.gz	\
-	&& cd /
+# # Library download
+# RUN mkdir /numa_bench; cd /numa_bench \
+# 	&& git clone https://github.com/xianyi/OpenBLAS.git /numa_bench/OpenBLAS \
+# 	&& wget http://www.fftw.org/fftw-3.3.8.tar.gz \
+# 	&& tar xzf fftw-3.3.8.tar.gz \
+#     && rm -rf fftw-3.3.8.tar.gz	\
+# 	&& cd /
 
 # ENV
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/lib/:/usr/local/cuda-10.2/lib64/:/usr/local/cuda-10.0/lib64/:/opt/OpenBLAS/lib/
