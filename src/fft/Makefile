@@ -51,4 +51,4 @@ all: $(EXES)
 		$(CXX) $(GPU_CXXFLAGS) $< -o $@_d.o $(GPU_LDFLAGS) $(D_PREC)
 
 clean:
-		@rm -rf $(EXES)*.o
+		@rm -rf *.o
