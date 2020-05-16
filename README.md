@@ -74,11 +74,13 @@ make benchmark-gpu
 ## GPU
 - ddot, sdot
 - dgemm, sgemm
+- 1D FFT (forward/backward)
+- 2D FFT (forward/backward)
+- 3D FFT (forward/backward)
 
 # Todo
 - benchmark target
   - BLAS関数を増やす
-  - FFT support (cufft)
   - Himeno Benchmark support
   - LAPACK Support (LU)
   - CURAND support
