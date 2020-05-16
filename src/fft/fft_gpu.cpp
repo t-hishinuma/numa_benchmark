@@ -137,7 +137,7 @@ void output_result_yaml(
 	std::cout << ", " << std::flush;
 
 	// arch. name
-	std::cout << "\"arch\" : " << "\"cpu\"" << std::flush;
+	std::cout << "\"arch\" : " << "\"gpu\"" << std::flush;
 	std::cout << ", " << std::flush;
 
 	// vector_size
