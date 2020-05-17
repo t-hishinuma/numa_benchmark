@@ -6,36 +6,33 @@
 
 #define DFUNC_NAME "dgemv"
 #define SFUNC_NAME "sgemv"
-#define READ_WRITE 2 * size * size
+#define READ_WRITE 2 * size * size + 2* size
 #define ORDER 2 * size * size
 
-inline float func(std::vector<float> &x, std::vector<float> &y){
-	double alpha = 3.0;
-	double beta  = 2.0;
-	return  cblas_sdot(x.size(), x.data(), 1,  y.data(), 1);
+inline void func(const std::vector<float>& A, const std::vector<float> &x, std::vector<float> &y){
+	cblas_sgemv(CblasRowMajor, CblasNoTrans, x.size(), x.size(), 1.0, A.data(), x.size(), x.data(), 1, 2.0, y.data(), 1);
 }
 
-inline double func(std::vector<double> &x, std::vector<double> &y){
-	double alpha = 3.0;
-	double beta  = 2.0;
-	return  cblas_ddot(x.size(), x.data(), 1,  y.data(), 1);
+inline void func(const std::vector<double>& A, const std::vector<double> &x, std::vector<double> &y){
+	cblas_dgemv(CblasRowMajor, CblasNoTrans, x.size(), x.size(), 1.0, A.data(), x.size(), x.data(), 1, 2.0, y.data(), 1);
 }
 
 template<typename T>
 double bench(const size_t size, const size_t iter){
 	
-	std::vector<T> x;
-	std::vector<T> y;
+	std::vector<T> x(size);
+	std::vector<T> y(size, 0.0);
+	std::vector<T> A(size*size, 321.0);
 	T ans = 0;
 
 	for(size_t i=0; i<size; i++){
-		x.push_back(rand());
-		y.push_back(rand());
+		x[i] = i;
 	}
+
 
 	double time = omp_get_wtime();
 	for(size_t i = 0; i < iter; i++){
-		ans = func(x, y);
+		func(A, x, y);
 	}
 	time = (omp_get_wtime() - time) / iter;
 
@@ -57,7 +54,7 @@ void output_result_yaml(
 	std::cout << "- {" << std::flush;
 
 	// type name
-	std::cout << "\"type\" : " << "\"blas1\"" << std::flush;
+	std::cout << "\"type\" : " << "\"blas2\"" << std::flush;
 	std::cout << ", " << std::flush;
 
 	// func name
@@ -80,9 +77,9 @@ void output_result_yaml(
 	std::cout << "\"time_sec\" : " << time << std::flush;
 	std::cout << ", " << std::flush;
 
-	// memory B/W
-	std::cout << "\"mem_gb_s\" : " << mem << std::flush;
-	std::cout << ", " << std::flush;
+// 	// memory B/W
+// 	std::cout << "\"mem_gb_s\" : " << mem << std::flush;
+// 	std::cout << ", " << std::flush;
 
 	// perf
 	std::cout << "\"perf_gflops\" : " << perf << std::flush;

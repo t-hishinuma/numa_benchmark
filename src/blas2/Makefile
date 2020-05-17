@@ -7,7 +7,7 @@ GPU_CXXFLAGS?=-O3 -fopenmp
 GPU_LDFLAGS= -lcublas -lcudart
 #GPU_LDFLAGS+= -I/usr/local/cuda-10.0/include -L/usr/local/cuda-10.0/lib64
 
-EXES= dot_cpu dot_gpu
+EXES= gemv_cpu gemv_gpu
 
 .PHONY: all clean
 
