@@ -31,7 +31,7 @@ double bench(const size_t size, const size_t iter){
 	std::vector<T> Hostx(size);
 	std::vector<T> Hosty(size, 0.0);
 
-	for(size_t i=0; i<size*size; i++){
+	for(size_t i=0; i<size; i++){
 		Hostx[i] = i;
 	}
 
