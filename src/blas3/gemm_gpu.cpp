@@ -58,21 +58,21 @@ double bench(const size_t size, const size_t iter){
 	stat = cublasSetMatrix(size, size, sizeof(T), HostA.data(), size, DevA, size);
 	if (stat != CUBLAS_STATUS_SUCCESS) {
 		std::cout << "data download failed" << std::endl;
-		cudaFree (DevA);
+		cudaFree (DevA); cudaFree (DevB); cudaFree (DevC);
 		cublasDestroy(handle);
 		return EXIT_FAILURE;
 	}
 	stat = cublasSetMatrix(size, size, sizeof(T), HostB.data(), size, DevB, size);
 	if (stat != CUBLAS_STATUS_SUCCESS) {
 		std::cout << "data download failed" << std::endl;
-		cudaFree (DevB);
+		cudaFree (DevA); cudaFree (DevB); cudaFree (DevC);
 		cublasDestroy(handle);
 		return EXIT_FAILURE;
 	}
 	stat = cublasSetMatrix(size, size, sizeof(T), HostC.data(), size, DevC, size);
 	if (stat != CUBLAS_STATUS_SUCCESS) {
 		std::cout << "data download failed" << std::endl;
-		cudaFree (DevC);
+		cudaFree (DevA); cudaFree (DevB); cudaFree (DevC);
 		cublasDestroy(handle);
 		return EXIT_FAILURE;
 	}
