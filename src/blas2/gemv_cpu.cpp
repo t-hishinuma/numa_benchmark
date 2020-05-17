@@ -6,7 +6,7 @@
 
 #define DFUNC_NAME "dgemv"
 #define SFUNC_NAME "sgemv"
-#define READ_WRITE 2 * size * size + 2* size
+#define READ_WRITE size * size + 2 * size
 #define ORDER 2 * size * size
 
 inline void func(const std::vector<float>& A, const std::vector<float> &x, std::vector<float> &y){
