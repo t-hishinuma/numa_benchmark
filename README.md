@@ -1,14 +1,38 @@
 # numa_benchmark
 [![Docker Automated build](https://img.shields.io/badge/Docker-automated-blue)](https://hub.docker.com/repository/docker/hishinumat/numa_benchmark/general)
 
-NUMerical  linear  Algebra Benchmark (with docker)
+## NUMerical  linear  Algebra Benchmark (with docker)
 
-* `benchmark_config` を作成してDockerの`/work`にマウントするとベンチマークし，resultにymlとhtmlが出力される．
-* `run`コマンドを与えることによってOpenBLASのコンパイルからベンチマークまでが行われる．
-* OpenBLASのコンパイルオプションは現状OpenBLASのcmakeの判定任せ (SIMDやコア数は判定するはず)
+* Dockerを使ってコンパイラやソフトウェアのバージョンなどを統一し，統一された方法・環境でベンチマークを行うことを目的に開発されています．
+* 簡易的ですがベンチマーク結果の集計[Webサービス](http://34.67.228.30/)も開発しています (後述しますがセキュリティ設定は適当なので過度な信頼はしないで下さい)．
 
+# Current support status
+## CPU
+- ddot, sdot
+- dgemv, sgemv
+- dgemm, sgemm
+- 1D FFT (forward/backward)
+- 2D FFT (forward/backward)
+- 3D FFT (forward/backward)
+
+## GPU
+- ddot, sdot
+- dgemv, sgemv
+- dgemm, sgemm
+- 1D FFT (forward/backward)
+- 2D FFT (forward/backward)
+- 3D FFT (forward/backward)
+
+# Requirements
+- git
+- make
+- docker
 
 # How to use 
+* `benchmark_config` を作成してDockerの`/work`にマウントするとベンチマークし，resultにymlとhtmlが出力される (envで与えてもいいです)．
+* `run`コマンドか`run-upload` コマンドを`docker run` に与えることによってOpenBLASやFFTWのコンパイルからベンチマークまでが行われる．
+* OpenBLASのコンパイルオプションは現状OpenBLASのcmakeの判定任せ (SIMDやコア数は判定するはず)
+
 ## Docker (CPU)
 ### デフォルト設定で良い場合
 
@@ -50,40 +74,14 @@ make benchmark-gpu
 
 `$(PROJECT_DIR)/result`に結果のymlとhtmlとグラフが生成される
 
-## local (非推奨)
-1. install CBLAS
-2. `make`
-3. `./test.sh ./benchmark_config`
-
 # benchmark\_configの作成方法
 あとで．大体読めば分かるように作った．．つもり
 
-# Requirements
-- git
-- make
-- docker
-
-# Current support status
-## CPU
-- ddot, sdot
-- dgemm, sgemm
-- 1D FFT (forward/backward)
-- 2D FFT (forward/backward)
-- 3D FFT (forward/backward)
-
-## GPU
-- ddot, sdot
-- dgemm, sgemm
-- 1D FFT (forward/backward)
-- 2D FFT (forward/backward)
-- 3D FFT (forward/backward)
-
 # Todo
 - benchmark target
-  - BLAS関数を増やす
-  - Himeno Benchmark support
-  - LAPACK Support (LU)
   - CURAND support
+  - Himeno Benchmark or sparse Library benchmark support
+  - LAPACK Support (LU)
 
 - other
   - other compiler support
