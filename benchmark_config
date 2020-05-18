@@ -38,6 +38,22 @@ DDOT_MAX_SIZE=10000000
 DDOT_INCL="*10" # e.g.) "+10", "*100"
 DDOT_TRIAL=10 # for average
 
+# OpenBLAS SGEMV #####################
+
+SGEMV_EXEC=1 # 1 or 0
+SGEMV_MIN_SIZE=200
+SGEMV_MAX_SIZE=3000
+SGEMV_INCL="+200" # e.g.) "+10", "*100"
+SGEMV_TRIAL=10 # for average
+
+# OpenBLAS DGEMV #####################
+
+DGEMV_EXEC=1 # 1 or 0
+DGEMV_MIN_SIZE=200
+DGEMV_MAX_SIZE=3000
+DGEMV_INCL="+200" # e.g.) "+10", "*100"
+DGEMV_TRIAL=10 # for average
+
 # OpenBLAS SGEMM #####################
 
 SGEMM_EXEC=1 # 1 or 0

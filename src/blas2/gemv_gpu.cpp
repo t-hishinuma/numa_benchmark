@@ -1,24 +1,24 @@
 #include <cuda_runtime.h>
-#include <cublas_v2.h>
+#include "cublas_v2.h"
 #include <iostream>
 #include <vector>
 #include<omp.h>
 
-#define DFUNC_NAME "ddot"
-#define SFUNC_NAME "sdot"
-#define READ_WRITE 2 * size
-#define ORDER 2 * size
+#define DFUNC_NAME "dgemv"
+#define SFUNC_NAME "sgemv"
+#define READ_WRITE size * size + 2 * size
+#define ORDER 2 * size * size 
 
-inline float func(float* x, float* y, const size_t size, cublasHandle_t &handle){
-	float result = 0;
-	cublasSdot(handle, size, x, 1, y, 1, &result);
-	return result;
+inline void func(const float* A, const float* x, float* y, const size_t n, cublasHandle_t &handle){
+	float alpha = 1.0;
+	float beta = 2.0;
+	cublasSgemv(handle, CUBLAS_OP_N, n, n, &alpha, A, n, x, 1, &beta, y, 1);
 }
 
-inline double func(double* x, double* y, const size_t size, cublasHandle_t &handle){
-	double result = 0;
-	cublasDdot(handle, size, x, 1, y, 1, &result);
-	return result;
+inline void func(const double* A, const double* x, double* y, const size_t n, cublasHandle_t &handle){
+	double alpha = 1.0;
+	double beta = 2.0;
+	cublasDgemv(handle, CUBLAS_OP_N, n, n, &alpha, A, n, x, 1, &beta, y, 1);
 }
 
 template <typename T>
@@ -27,19 +27,21 @@ double bench(const size_t size, const size_t iter){
 	cublasStatus_t stat;
 	cublasHandle_t handle;
 
-	std::vector<T> Hostx;
-	std::vector<T> Hosty;
+	std::vector<T> HostA(size*size, 321.0);
+	std::vector<T> Hostx(size);
+	std::vector<T> Hosty(size, 0.0);
 
 	for(size_t i=0; i<size; i++){
-		Hostx.push_back(rand());
-		Hosty.push_back(rand());
+		Hostx[i] = i;
 	}
 
+	T* DevA;
 	T* Devx;
 	T* Devy;
 
-	cudaStat = cudaMalloc ((void**)&Devx, Hostx.size() * sizeof(T));
-	cudaStat = cudaMalloc ((void**)&Devy, Hosty.size() * sizeof(T));
+	cudaStat = cudaMalloc ((void**)&DevA, size*size * sizeof(T));
+	cudaStat = cudaMalloc ((void**)&Devx, size * sizeof(T));
+	cudaStat = cudaMalloc ((void**)&Devy, size * sizeof(T));
 
 	if (cudaStat != cudaSuccess) {
 		std::cout << "device memory allocation failed" << std::endl;
@@ -52,31 +54,40 @@ double bench(const size_t size, const size_t iter){
 		return EXIT_FAILURE;
 	}
 
-	stat = cublasSetVector(Hostx.size(), sizeof(T), Hostx.data(), 1, Devx, 1);
+	stat = cublasSetMatrix(size, size, sizeof(T), HostA.data(), size, DevA, size);
 	if (stat != CUBLAS_STATUS_SUCCESS) {
 		std::cout << "data download failed" << std::endl;
-		cudaFree (Devx);
+		cudaFree (DevA); cudaFree (Devx); cudaFree (Devy);
+		cublasDestroy(handle);
+		return EXIT_FAILURE;
+	}
+	stat = cublasSetVector(size, sizeof(T), Hostx.data(), 1, Devx, 1);
+	if (stat != CUBLAS_STATUS_SUCCESS) {
+		std::cout << "data download failed" << std::endl;
+		cudaFree (DevA); cudaFree (Devx); cudaFree (Devy);
+		cublasDestroy(handle);
+		return EXIT_FAILURE;
+	}
+	stat = cublasSetVector(size, sizeof(T), Hosty.data(), 1, Devy, 1);
+	if (stat != CUBLAS_STATUS_SUCCESS) {
+		std::cout << "data download failed" << std::endl;
+		cudaFree (DevA); cudaFree (Devx); cudaFree (Devy);
 		cublasDestroy(handle);
 		return EXIT_FAILURE;
 	}
 
-	stat = cublasSetVector(Hosty.size(), sizeof(T), Hosty.data(), 1, Devy, 1);
-	if (stat != CUBLAS_STATUS_SUCCESS) {
-		std::cout << "data download failed" << std::endl;
-		cudaFree (Devy);
-		cublasDestroy(handle);
-		return EXIT_FAILURE;
-	}
 
+	func(DevA, Devx, Devy, size, handle);
 	cudaStreamSynchronize(0);
-	T result=0;
+
 	double time = omp_get_wtime();
 	for(size_t i = 0; i < iter; i++){
-		result = func(Devx, Devy, size, handle);
+		func(DevA, Devx, Devy, size, handle);
 	}
 	cudaStreamSynchronize(0);
 	time = (omp_get_wtime() - time) / iter;
 
+	cudaFree (DevA);
 	cudaFree (Devx);
 	cudaFree (Devy);
 	cublasDestroy(handle);
@@ -91,7 +102,6 @@ void output_result_yaml(
 		const size_t prec
 		){
 
-	double mem = READ_WRITE * prec / time / 1.0e+9;
 	double perf = ORDER / time / 1.0e+9;
 	double th = omp_get_max_threads();
 
@@ -99,7 +109,7 @@ void output_result_yaml(
 	std::cout << "- {" << std::flush;
 
 	// type name
-	std::cout << "\"type\" : " << "\"blas1\"" << std::flush;
+	std::cout << "\"type\" : " << "\"blas2\"" << std::flush;
 	std::cout << ", " << std::flush;
 
 	// func name
@@ -116,10 +126,6 @@ void output_result_yaml(
 
 	// vector_size
 	std::cout << "\"size\" : " << size << std::flush;
-	std::cout << ", " << std::flush;
-
-	// func name
-	std::cout << "\"time_sec\" : " << time << std::flush;
 	std::cout << ", " << std::flush;
 
 	// time

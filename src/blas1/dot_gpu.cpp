@@ -56,7 +56,7 @@ double bench(const size_t size, const size_t iter){
 	stat = cublasSetVector(Hostx.size(), sizeof(T), Hostx.data(), 1, Devx, 1);
 	if (stat != CUBLAS_STATUS_SUCCESS) {
 		std::cout << "data download failed" << std::endl;
-		cudaFree (Devx);
+		cudaFree (Devx); cudaFree (Devy);
 		cublasDestroy(handle);
 		return EXIT_FAILURE;
 	}
@@ -64,7 +64,7 @@ double bench(const size_t size, const size_t iter){
 	stat = cublasSetVector(Hosty.size(), sizeof(T), Hosty.data(), 1, Devy, 1);
 	if (stat != CUBLAS_STATUS_SUCCESS) {
 		std::cout << "data download failed" << std::endl;
-		cudaFree (Devy);
+		cudaFree (Devx); cudaFree (Devy);
 		cublasDestroy(handle);
 		return EXIT_FAILURE;
 	}

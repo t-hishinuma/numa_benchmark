@@ -44,9 +44,36 @@ for func in func_list:
                 plt.xlabel("Vector size") 
                 plt.xscale("log")
 
-                plt.plot(size, time, label="time [sec]", marker="o")
-                plt.plot(size, perf, label="performance [GFLOPS]", marker="o")   
-                plt.plot(size, mem, label="memory speed [GB/s]", marker="o")
+                plt.plot(size, time, label="Time [sec]", marker="o")
+                plt.plot(size, perf, label="Performance [GFLOPS]", marker="o")   
+                plt.plot(size, mem, label="Memory speed [GB/s]", marker="o")
+
+                plt.legend(loc="best") 
+                plt.savefig(title + ".png")
+                plt.close()
+                figure_list.append( title + ".png" )
+        # GEMV
+        if "gemv" in func:
+            data = df[ (df["func"] == func) & (df["threads"] == thread) ]
+            arch_list = set(data["arch"].dropna())
+            for arch in arch_list:
+                data = df[ (df["func"] == func) & (df["threads"] == thread) & (df["arch"] == arch) ]
+                size = data[["size"]].values.tolist()
+                time = data[["time_sec"]].values.tolist()
+                perf = data[["perf_gflops"]].values.tolist()
+
+                if arch == "cpu":
+                    title = func + "_" + str(int(thread)) + "threads" + "_" + arch
+                else:
+                    title = func + "_" + arch
+
+                plt.title(title)
+
+                plt.xlabel("Matrix size N (N = M)") 
+                #plt.xscale("log")
+
+                plt.plot(size, time, label="Time [sec]", marker="o")
+                plt.plot(size, perf, label="Performance [GFLOPS]", marker="o")   
 
                 plt.legend(loc="best") 
                 plt.savefig(title + ".png")
@@ -72,8 +99,8 @@ for func in func_list:
                 plt.xlabel("Matrix size N (N = M = K)") 
                 #plt.xscale("log")
 
-                plt.plot(size, time, label="time [sec]", marker="o")
-                plt.plot(size, perf, label="performance [GFLOPS]", marker="o")   
+                plt.plot(size, time, label="Time [sec]", marker="o")
+                plt.plot(size, perf, label="Performance [GFLOPS]", marker="o")   
 
                 plt.legend(loc="best") 
                 plt.savefig(title + ".png")
@@ -98,8 +125,8 @@ for func in func_list:
                 plt.xlabel("size") 
                 plt.xscale("log", basex=2)
 
-                plt.plot(size, time, label="time [sec]", marker="o")
-                plt.plot(size, perf, label="performance [GFLOPS]", marker="o")   
+                plt.plot(size, time, label="Time [sec]", marker="o")
+                plt.plot(size, perf, label="Performance [GFLOPS]", marker="o")   
 
                 plt.legend(loc="best") 
                 plt.savefig(title + ".png")

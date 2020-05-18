@@ -74,6 +74,10 @@ fi
 blas_exec $SDOT_EXEC $SDOT_MIN_SIZE $SDOT_MAX_SIZE $SDOT_INCL $SDOT_TRIAL ./src/blas1/dot float
 blas_exec $DDOT_EXEC $DDOT_MIN_SIZE $DDOT_MAX_SIZE $DDOT_INCL $DDOT_TRIAL ./src/blas1/dot double
 
+# blas2
+blas_exec $SGEMV_EXEC $SGEMV_MIN_SIZE $SGEMV_MAX_SIZE $SGEMV_INCL $SGEMV_TRIAL ./src/blas2/gemv float
+blas_exec $DGEMV_EXEC $DGEMV_MIN_SIZE $DGEMV_MAX_SIZE $DGEMV_INCL $DGEMV_TRIAL ./src/blas2/gemv double
+
 # blas3
 blas_exec $SGEMM_EXEC $SGEMM_MIN_SIZE $SGEMM_MAX_SIZE $SGEMM_INCL $SGEMM_TRIAL ./src/blas3/gemm float
 blas_exec $DGEMM_EXEC $DGEMM_MIN_SIZE $DGEMM_MAX_SIZE $DGEMM_INCL $DGEMM_TRIAL ./src/blas3/gemm double
