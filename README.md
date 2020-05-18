@@ -1,10 +1,17 @@
 # numa_benchmark
 [![Docker Automated build](https://img.shields.io/badge/Docker-automated-blue)](https://hub.docker.com/repository/docker/hishinumat/numa_benchmark/general)
+[![result-Web-portal](https://img.shields.io/badge/result-web-green)](http://34.67.228.30/)
 
 ## NUMerical  linear  Algebra Benchmark (with docker)
 
 * Dockerを使ってコンパイラやソフトウェアのバージョンなどを統一し，統一された方法・環境でベンチマークを行うことを目的に開発されています．
+* ユーザはDockerやgitなどの最低限のツールを導入するだけでベンチマークを取ることが可能です
 * 簡易的ですがベンチマーク結果の集計[Webサービス](http://34.67.228.30/)も開発しています (後述しますがセキュリティ設定は適当なので過度な信頼はしないで下さい)．
+
+# Requirements
+- git
+- make
+- docker
 
 # Current support status
 ## CPU
@@ -23,15 +30,11 @@
 - 2D FFT (forward/backward)
 - 3D FFT (forward/backward)
 
-# Requirements
-- git
-- make
-- docker
-
 # How to use 
-* `benchmark_config` を作成してDockerの`/work`にマウントするとベンチマークし，resultにymlとhtmlが出力される (envで与えてもいいです)．
+* `benchmark_config` を作成してDockerの`/work`にマウントするとベンチマークし，resultにymlとhtmlが出力される．
 * `run`コマンドか`run-upload` コマンドを`docker run` に与えることによってOpenBLASやFFTWのコンパイルからベンチマークまでが行われる．
-* OpenBLASのコンパイルオプションは現状OpenBLASのcmakeの判定任せ (SIMDやコア数は判定するはず)
+	* OpenBLASのコンパイルオプションは現状OpenBLASのmakeの判定任せ (SIMDやコア数は判定するはず)
+	* FFTWはSIMDオプションが自動選択されなかったので判定して入れるようにしています
 
 ## Docker (CPU)
 ### デフォルト設定で良い場合
@@ -75,7 +78,8 @@ make benchmark-gpu
 `$(PROJECT_DIR)/result`に結果のymlとhtmlとグラフが生成される
 
 # benchmark\_configの作成方法
-あとで．大体読めば分かるように作った．．つもり
+大体読めば分かるように作った．．つもり
+基本はgithubから落としてきて必要な箇所だけ変更して下さい
 
 # Todo
 - benchmark target
