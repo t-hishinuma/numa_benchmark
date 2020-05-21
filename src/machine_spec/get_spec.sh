@@ -11,13 +11,13 @@ GCC=`gcc --version | grep gcc`
 # SIMD
 SIMD=""
 if [[ `grep avx512 /proc/cpuinfo` ]]; then
-	SIMD="AVX512"
+	SIMD="\"AVX512\""
 elif [[ `grep avx2 /proc/cpuinfo` ]]; then
-	SIMD="AVX2"
+	SIMD="\"AVX2\""
 elif [[ `grep avx /proc/cpuinfo` ]]; then
-	SIMD="AVX"
+	SIMD="\"AVX\""
 elif [[ `grep sse2 /proc/cpuinfo` ]]; then
-	SIMD="SSE2"
+	SIMD="\"SSE2\""
 else
 	SIMD=""
 fi
