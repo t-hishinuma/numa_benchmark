@@ -118,9 +118,9 @@ void output_result_yaml(
 		std::cout << sep << " " << std::flush;
 	};
 
-	out("type", "blas1", ",");
+	out("type", "blas2", ",");
 	out("func", func, ",");
-	out("arch", "cpu", ",");
+	out("arch", "gpu", ",");
 	out("threads", th, ",");
 	out("size", size, ",");
 	out("time_sec", time, ",");
