@@ -127,6 +127,8 @@ void output_result_yaml(
 	out("time_sec", time, ",");
 	//out("mem_gb_s", mem, ",");
 	out("perf_gflops", perf, "}");
+
+	std::cout << std::endl;
 }
 
 int main(int argc, char** argv){
