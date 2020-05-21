@@ -96,40 +96,29 @@ void output_result_yaml(
 	double perf = ORDER / time / 1.0e+9;
 	double th = omp_get_max_threads();
 
-	// output yaml format
+	auto out = [](const auto x, const auto y, const auto sep){
+		std::cout << "\"" <<  x << "\"" << " : " << std::flush;
+		if(typeid(y) == typeid(std::string) || typeid(y) == typeid(const char*)){
+			std::cout << "\"" <<  y << "\"" << std::flush;
+		}
+		else{
+			std::cout << y << std::flush;
+		}
+		std::cout << sep << " " << std::flush;
+	};
+
 	std::cout << "- {" << std::flush;
 
-	// type name
-	std::cout << "\"type\" : " << "\"blas1\"" << std::flush;
-	std::cout << ", " << std::flush;
+	out("type", "blas1", ",");
+	out("func", func, ",");
+	out("arch", "gpu", ",");
+	out("threads", th, ",");
+	out("size", size, ",");
+	out("time_sec", time, ",");
+	out("mem_gb_s", mem, ",");
+	out("perf_gflops", perf, "}");
 
-	// func name
-	std::cout << "\"func\" : " << "\"" << func << "\"" << std::flush;
-	std::cout << ", " << std::flush;
-
-	// arch. name
-	std::cout << "\"arch\" : " << "\"gpu\"" << std::flush;
-	std::cout << ", " << std::flush;
-
-	// threads
-	std::cout << "\"threads\" : " << th << std::flush;
-	std::cout << ", " << std::flush;
-
-	// vector_size
-	std::cout << "\"size\" : " << size << std::flush;
-	std::cout << ", " << std::flush;
-
-	// time
-	std::cout << "\"time_sec\" : " << time << std::flush;
-	std::cout << ", " << std::flush;
-
-	// memory B/W
-	std::cout << "\"mem_gb_s\" : " << mem << std::flush;
-	std::cout << ", " << std::flush;
-
-	// perf
-	std::cout << "\"perf_gflops\" : " << perf << std::flush;
-	std::cout << "}" << std::endl;
+	std::cout << std::endl;
 }
 
 int main(int argc, char** argv){
@@ -142,18 +131,15 @@ int main(int argc, char** argv){
 	size_t size = atoi(argv[1]);
 	size_t iter = atoi(argv[2]);
 
-	double time = 0;
-
 	if(strcmp(argv[3], "float") == 0){
-		time = bench<float>(size,iter);
+		double time = bench<float>(size,iter);
 		output_result_yaml(SFUNC_NAME, time, size, sizeof(float));
 	}
 
 	if(strcmp(argv[3], "double")==0){
-		time = bench<double>(size,iter);
+		double time = bench<double>(size,iter);
 		output_result_yaml(DFUNC_NAME, time, size, sizeof(double));
 	}
 
 	return 0;
 }
-

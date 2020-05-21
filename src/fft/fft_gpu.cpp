@@ -66,13 +66,13 @@ double bench(const size_t x, const size_t y, const size_t z, const size_t iter, 
 	else if( strcmp(type, "backward") == 0) {
 		// PLAN
 		if( y == 1 && z == 1){
-			plan = FFT_PLAN_DFT_1D(x, DevIn, DevOut, FFTW_FORWARD, FFTW_ESTIMATE);
+			plan = FFT_PLAN_DFT_1D(x, DevIn, DevOut, FFTW_BACKWARD, FFTW_ESTIMATE);
 		}
 		else if( z == 1){
-			plan = FFT_PLAN_DFT_2D(x, y, DevIn, DevOut, FFTW_FORWARD, FFTW_ESTIMATE);
+			plan = FFT_PLAN_DFT_2D(x, y, DevIn, DevOut, FFTW_BACKWARD, FFTW_ESTIMATE);
 		}
 		else{
-			plan = FFT_PLAN_DFT_3D(x, y, z, DevIn, DevOut, FFTW_FORWARD, FFTW_ESTIMATE);
+			plan = FFT_PLAN_DFT_3D(x, y, z, DevIn, DevOut, FFTW_BACKWARD, FFTW_ESTIMATE);
 		}
 
 		FFT_EXE(plan);
@@ -92,28 +92,6 @@ double bench(const size_t x, const size_t y, const size_t z, const size_t iter, 
 	return time;
 }
 
- 
-template<typename T>
-double bench(const size_t size, const size_t iter){
-
-	std::vector<T> x;
-	std::vector<T> y;
-	T ans = 0;
-
-	for(size_t i=0; i<size; i++){
-		x.push_back(rand());
-		y.push_back(rand());
-	}
-
-	double time = omp_get_wtime();
-	for(size_t i = 0; i < iter; i++){
-		ans = func(x, y);
-	}
-	time = (omp_get_wtime() - time) / iter;
-
-	return time;
-}
-
 void output_result_yaml(
 		const std::string func,
 		const double time,
@@ -125,36 +103,28 @@ void output_result_yaml(
 	double perf = ORDER / time / 1.0e+9;
 	double th = omp_get_max_threads();
 
-	// output yaml format
+	auto out = [](const auto x, const auto y, const auto sep){
+		std::cout << "\"" <<  x << "\"" << " : " << std::flush;
+		if(typeid(y) == typeid(std::string) || typeid(y) == typeid(const char*)){
+			std::cout << "\"" <<  y << "\"" << std::flush;
+		}
+		else{
+			std::cout << y << std::flush;
+		}
+		std::cout << sep << " " << std::flush;
+	};
+
 	std::cout << "- {" << std::flush;
 
-	// type name
-	std::cout << "\"type\" : " << "\"fft\"" << std::flush;
-	std::cout << ", " << std::flush;
+	out("type", "fft", ",");
+	out("func", func, ",");
+	out("arch", "gpu", ",");
+	out("threads", th, ",");
+	out("size", x, ",");
+	out("time_sec", time, ",");
+	out("perf_gflops", perf, "}");
 
-	// func name
-	std::cout << "\"func\" : " << "\"" << func << "\"" << std::flush;
-	std::cout << ", " << std::flush;
-
-	// arch. name
-	std::cout << "\"arch\" : " << "\"gpu\"" << std::flush;
-	std::cout << ", " << std::flush;
-
-	// vector_size
-	std::cout << "\"threads\" : " << th << std::flush;
-	std::cout << ", " << std::flush;
-
-	// vector_size
-	std::cout << "\"size\" : " << x << std::flush;
-	std::cout << ", " << std::flush;
-
-	// func name
-	std::cout << "\"time_sec\" : " << time << std::flush;
-	std::cout << ", " << std::flush;
-
-	// perf
-	std::cout << "\"perf_gflops\" : " << perf << std::flush;
-	std::cout << "}" << std::endl;
+	std::cout << std::endl;
 }
  
 int main(int argc, char** argv){
@@ -170,8 +140,6 @@ int main(int argc, char** argv){
 	char* type = argv[3];
 	size_t dim = atoi(argv[4]);
 	size_t z, y;
-
-	double time = 0;
 
 	char funcname[64] = "";
 	if( dim == 3){
@@ -199,7 +167,7 @@ int main(int argc, char** argv){
 
 	z = 1;
 
-	time = bench(x, y, z, iter, type);
+	double time = bench(x, y, z, iter, type);
 	output_result_yaml(funcname, time, x, y, z);
 
 	return 0;

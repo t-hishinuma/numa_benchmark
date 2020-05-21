@@ -1,5 +1,5 @@
 CXX=g++
-CPU_CXXFLAGS?=-O3 -fopenmp
+CPU_CXXFLAGS?=-O3 -fopenmp -std=c++17
 
 # float
 F_CPU_LDFLAGS+=-lm -I/usr/local/include/ -L/usr/local/lib/
