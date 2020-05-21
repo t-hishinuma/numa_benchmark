@@ -1,9 +1,9 @@
 CXX=g++
 
-CPU_CXXFLAGS?=-O3 -fopenmp
+CPU_CXXFLAGS?=-O3 -fopenmp -std=c++17
 CPU_LDFLAGS=-lopenblas
 
-GPU_CXXFLAGS?=-O3 -fopenmp
+GPU_CXXFLAGS?=-O3 -fopenmp -std=c++17
 GPU_LDFLAGS+= -lcublas -lcudart
 #GPU_LDFLAGS= -I/usr/local/cuda-10.0/include -L/usr/local/cuda-10.0/lib64
 
