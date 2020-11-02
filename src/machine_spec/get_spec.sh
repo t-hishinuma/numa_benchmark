@@ -25,6 +25,9 @@ fi
 # GPU
 if type "nvidia-smi" > /dev/null 2>&1; then
 	GPU=`nvidia-smi -L`
+    if echo $GPU | grep fail"; then
+        GPU="none"
+    fi
 else
 	GPU="none"
 fi
